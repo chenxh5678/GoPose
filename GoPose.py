@@ -1,4 +1,7 @@
-import sys,cv2,pickle,os,csv,math,time
+#  Author: Xihang Chen
+#  Email: 786028450@qq.com
+
+import sys,cv2,pickle,os,csv,math
 from UI.Ui_GoPose import Ui_MainWindow
 from PyQt5.QtWidgets import (QApplication,QMainWindow,QTableWidgetItem,QLineEdit,
                             QFileDialog,QMessageBox,QHeaderView,QInputDialog,QAbstractItemView)
@@ -20,9 +23,9 @@ class GoPose(Ui_MainWindow,QMainWindow):
         self.button()
 
     def default(self):  # 一些默认值
-        self.fps = 0
-        self.fps_max = 0
-        self.fps_video = 1
+        self.fps = 0  # 当前帧
+        self.fpsMax = 0
+        self.fpsRate = 1
         self.pc = None  # 比例系数
         self.pkl = False
         self.scale = False  # 比例尺开关
@@ -44,6 +47,7 @@ class GoPose(Ui_MainWindow,QMainWindow):
         self.play2 = False  # 播放状态
         self.changFlag = 0  # 播放暂停图标
         self.cwd = os.getcwd() # 获取当前程序文件位置
+        self.sli_label()  # 显示滑动条状态
         self.tableWidget.setSelectionBehavior(QAbstractItemView.SelectRows)
         # self.tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
@@ -75,7 +79,6 @@ class GoPose(Ui_MainWindow,QMainWindow):
         self.actionOutPara.triggered.connect(self.exportResults)
         self.actionFont.triggered.connect(self.fontSize)
 
-        
     def button(self):
         self.pushButton.clicked.connect(self.last)
         self.pushButton_2.clicked.connect(self.next_)
@@ -83,7 +86,6 @@ class GoPose(Ui_MainWindow,QMainWindow):
         self.imgLabel.connect_customized_slot(self.Scale)
         self.imgLabel.connect_customized_slot(self.length)
         self.imgLabel.connect_customized_slot(self.levelTool)
-        self.sli_label()  # 显示滑动条状态
         self.pushButton_5.clicked.connect(self.workspaceClear)
         self.pushButton_3.clicked.connect(self.workspaceStart)
         self.pushButton_4.clicked.connect(self.workspaceEnd)
@@ -130,7 +132,7 @@ class GoPose(Ui_MainWindow,QMainWindow):
         self.currentFrame()
         
     def next_(self):  # 下一帧
-        if self.fps < self.fps_max:
+        if self.fps < self.fpsMax:
             self.fps += 1
             self.horizontalSlider.setSliderPosition(self.fps)
             self.sli_label()
@@ -142,28 +144,28 @@ class GoPose(Ui_MainWindow,QMainWindow):
             self.sli_label()
     
     def sli_label(self):  # 显示帧数状态
-        time_now = round(self.fps/self.fps_video,3)
-        time_totle = round(self.fps_max/self.fps_video,3)
-        slide_text = '总时长：{}秒（{}帧）      当前：{}秒（{}帧）'.format(time_totle,self.fps_max,time_now,self.fps)
+        time_now = round(self.fps/self.fpsRate,3)
+        time_totle = round(self.fpsMax/self.fpsRate,3)
+        slide_text = '总时长：{}秒（{}帧）      当前：{}秒（{}帧）'.format(time_totle,self.fpsMax,time_now,self.fps)
         self.label.setText(slide_text)
         range_text = '工作区开始：{}帧        工作区结束：{}帧'.format(self.cut1,self.cut2)
         self.label_4.setText(range_text)
 
     '''-----Openpose解析关键点-----'''
     def analytic(self):
-        ok = QMessageBox.information(self, '自动解析', '开始自动解析当前视频人体关键点', QMessageBox.Yes | QMessageBox.No,QMessageBox.Yes)
-        if ok == 16384:
+        radio,ok= Dialog.getResult(self)
+        if ok:
             try:
-                analysis(self.video)
+                analysis(self.video, self.cut1, self.cut2, zone = radio)
                 QMessageBox.information(self, '消息', '解析点数据已存入data文件夹下')
             except Exception as e:
                 QMessageBox.warning(self,'解析错误',str(e),QMessageBox.Yes|QMessageBox.No,QMessageBox.Yes)
     
     '''-----帧率、显示棍图人数-----'''
     def realFPS(self):
-        fps_video, okPressed = QInputDialog.getInt(self, '视频帧率', '输入实际拍摄帧率：', self.fps_video, 1, 10000)
-        if okPressed and fps_video != '':
-            self.fps_video = fps_video
+        fpsRate, okPressed = QInputDialog.getInt(self, '视频帧率', '输入实际拍摄帧率：', self.fpsRate, 1, 10000)
+        if okPressed and fpsRate != '':
+            self.fpsRate = fpsRate
             if self.pkl:
                 self.text(i=1)
             else:
@@ -178,11 +180,11 @@ class GoPose(Ui_MainWindow,QMainWindow):
     def text(self,i=0):
         if i:
             video_name = self.video.split('/')[-1]
-            text = 'Video:{}        Size:{}        FPS:{}       解析点人数：{}      画面旋转角：{}°'.format(video_name,self.shape, self.fps_video,self.member_, self.rotationAngle)
+            text = 'Video:{}        Size:{}        FPS:{}       解析点人数：{}      画面旋转角：{}°'.format(video_name,self.shape, self.fpsRate,self.member_, self.rotationAngle)
             self.label_2.setText(text)
         else:
             video_name = self.video.split('/')[-1]
-            text = 'Video:{}        Size:{}        FPS:{}       画面旋转角：{}°'.format(video_name,self.shape, self.fps_video, self.rotationAngle)
+            text = 'Video:{}        Size:{}        FPS:{}       画面旋转角：{}°'.format(video_name,self.shape, self.fpsRate, self.rotationAngle)
             self.label_2.setText(text)
 
     '''-----管理器属性-----'''
@@ -287,11 +289,11 @@ class GoPose(Ui_MainWindow,QMainWindow):
                 self.horizontalSlider.setSliderPosition(0)  # 滑动条归零
                 self.cap = cv2.VideoCapture(self.video) 
                 cap = self.cap
-                self.fps_max = cap.get(7) - 1
-                self.horizontalSlider.setMaximum(self.fps_max)
+                self.fpsMax = cap.get(7) - 1
+                self.horizontalSlider.setMaximum(self.fpsMax)
                 self.horizontalSlider.valueChanged.connect(self.sli)
                 # 状态栏内容
-                self.fps_video = round(cap.get(cv2.CAP_PROP_FPS), 2)  # 获取视频帧率
+                self.fpsRate = round(cap.get(cv2.CAP_PROP_FPS), 2)  # 获取视频帧率
                 width = int(cap.get(3))  # 获取视频宽度
                 height = int(cap.get(4))  # 获取视频高度
                 self.shape = str(width) + '×' + str(height)  # 获取视频size
@@ -337,9 +339,10 @@ class GoPose(Ui_MainWindow,QMainWindow):
                 if self.pkl:
                     if self.data:
                         now = self.currentKeys()
-                        for d in now:  # 显示                              
-                            calculation.draw(frame,d,type = self.drawPoint)
-                        self.showResult()  # 计算参数
+                        if type(now) == np.ndarray:
+                            for d in now:  # 显示                              
+                                calculation.draw(frame,d,type = self.drawPoint)
+                            self.showResult()  # 计算参数
                 frame=cv2.cvtColor(frame,cv2.COLOR_RGB2BGR)
                 imge = QImage(frame.data,frame.shape[1],frame.shape[0],QImage.Format_RGB888)
                 self.imgLabel.setPixmap(QPixmap(imge))
@@ -351,8 +354,7 @@ class GoPose(Ui_MainWindow,QMainWindow):
         ok = QMessageBox.information(self,'消息','打开摄像头',QMessageBox.Yes | QMessageBox.No,QMessageBox.Yes)
         if ok == 16384:
             path = QFileDialog.getSaveFileName(self, '录像保存位置', os.getcwd(), "MP4(*.mp4)")
-            v = 'http://admin:admin@192.168.3.146:8081'
-            cap = cv2.VideoCapture(v)
+            cap = cv2.VideoCapture(0)
             fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # 设置写入视频的编码格式
             out = cv2.VideoWriter(path[0],fourcc, 20.0, (640,480))
             start = False
@@ -368,25 +370,25 @@ class GoPose(Ui_MainWindow,QMainWindow):
                 key = cv2.waitKey(10)
                 if key == 27:
                     break
-                    
             cap.release()
             out.release()
             cv2.destroyAllWindows()
 
     '''-----关键点事件-----'''
-    def loadKeys(self):    # 载入关键点
+    def loadKeys(self):    # 载入解析点
         self.pkl,_ = QFileDialog.getOpenFileName(self, '载入关键点', QDir.currentPath()) 
         if self.pkl:
             try:
                 with open(self.pkl, 'rb') as file0:
-                    self.data = pickle.load(file0)  # 关键点数据
+                    self.data = pickle.load(file0)  # 解析点数据
                 if self.data != None:
                     cap = self.cap
                     cap.set(cv2.CAP_PROP_POS_FRAMES,self.fps)  # 显示指定帧的画面
                     rval,frame = cap.read()                 
-                    now = self.currentKeys()                 
-                    for d in now:  # 显示
-                        calculation.draw(frame,d,type = self.drawPoint)
+                    now = self.currentKeys()  
+                    if type(now) == np.ndarray:              
+                        for d in now:  # 显示
+                            calculation.draw(frame,d,type = self.drawPoint)
                     frame=cv2.cvtColor(frame,cv2.COLOR_RGB2BGR)
                     imge = QImage(frame.data,frame.shape[1],frame.shape[0],QImage.Format_RGB888)
                     self.imgLabel.setPixmap(QPixmap(imge))
@@ -410,23 +412,26 @@ class GoPose(Ui_MainWindow,QMainWindow):
                 if item == '选择单人解析点':
                     self.tableWidget.setRowCount(0)
                     now = self.data[self.fps]
-                    now = self.showPeople(now)  # 筛选出3人
-                    choosePerson = [str(m) for m in range(len(now))]
-                    row = 0
-                    for a in choosePerson:
-                        count = self.tableWidget.rowCount()
-                        self.tableWidget.insertRow(count)  # 新增行
-                        newItem=QTableWidgetItem(a)
-                        self.tableWidget.setItem(row,1,newItem)
-                        manItem = QTableWidgetItem('人物')
-                        self.tableWidget.setItem(row,0,manItem)
-                        row += 1
+                    if type(now) == np.ndarray:
+                        now = self.showPeople(now)  # 筛选出3人
+                        choosePerson = [str(m) for m in range(len(now))]
+                        row = 0
+                        for a in choosePerson:
+                            count = self.tableWidget.rowCount()
+                            self.tableWidget.insertRow(count)  # 新增行
+                            newItem=QTableWidgetItem(a)
+                            self.tableWidget.setItem(row,1,newItem)
+                            manItem = QTableWidgetItem('人物')
+                            self.tableWidget.setItem(row,0,manItem)
+                            row += 1
                 else:
                     now = self.data[self.fps]
-                    now = self.showPeople(now)  # 筛选出3人
+                    if type(now) == np.ndarray:
+                        now = self.showPeople(now)  # 筛选出3人
             else:
                 now = self.data[self.fps]
-                now = self.showPeople(now)  # 筛选出3人
+                if type(now) == np.ndarray:
+                    now = self.showPeople(now)  # 筛选出3人
             return now
         except Exception as e:
             QMessageBox.warning(self,'当前解析点错误',str(e))
@@ -435,25 +440,26 @@ class GoPose(Ui_MainWindow,QMainWindow):
         try:
             item = self.treeWidget.currentItem().checkState(0)
             if item == 2 and self.pkl:
-                if self.data[self.fps].shape[0] == 1:
-                    i = self.tableWidget.currentRow()
-                    x1 = self.imgLabel.x
-                    y1 = self.imgLabel.y
-                    x1 = int(x1 / self.scaleFactor + 0.5)
-                    y1 = int(y1 / self.scaleFactor + 0.5)
-                    now = self.currentKeys()[0]
-                    now[i][0] = x1  # 修改25坐标点数据
-                    now[i][1] = y1
-                    self.data[self.fps][0] = now
-                    # 重新读取图像并画图
-                    cap = self.cap
-                    cap.set(cv2.CAP_PROP_POS_FRAMES,self.fps)  
-                    rval,frame = cap.read()
-                    calculation.draw(frame,now,type = self.drawPoint)
-                    frame=cv2.cvtColor(frame,cv2.COLOR_RGB2BGR)
-                    imge = QImage(frame.data,frame.shape[1],frame.shape[0],QImage.Format_RGB888)
-                    self.imgLabel.setPixmap(QPixmap.fromImage(imge))
-                    self.showResult()  # 计算结果
+                if type(self.data[self.fps]) == np.ndarray:
+                    if self.data[self.fps].shape[0] == 1:
+                        i = self.tableWidget.currentRow()
+                        x1 = self.imgLabel.x
+                        y1 = self.imgLabel.y
+                        x1 = int(x1 / self.scaleFactor + 0.5)
+                        y1 = int(y1 / self.scaleFactor + 0.5)
+                        now = self.currentKeys()[0]          
+                        now[i][0] = x1  # 修改25坐标点数据
+                        now[i][1] = y1
+                        self.data[self.fps][0] = now
+                        # 重新读取图像并画图
+                        cap = self.cap
+                        cap.set(cv2.CAP_PROP_POS_FRAMES,self.fps)  
+                        rval,frame = cap.read()
+                        calculation.draw(frame,now,type = self.drawPoint)
+                        frame=cv2.cvtColor(frame,cv2.COLOR_RGB2BGR)
+                        imge = QImage(frame.data,frame.shape[1],frame.shape[0],QImage.Format_RGB888)
+                        self.imgLabel.setPixmap(QPixmap.fromImage(imge))
+                        self.showResult()  # 计算结果
         except Exception as e:
             QMessageBox.warning(self,'修改解析点错误',str(e))
 
@@ -485,8 +491,9 @@ class GoPose(Ui_MainWindow,QMainWindow):
             cap.set(cv2.CAP_PROP_POS_FRAMES,self.fps)  
             rval,frame = cap.read()
             now = self.currentKeys()
-            self.now = now[m]
-            calculation.draw(frame,self.now,type = self.drawPoint)
+            if type(now) == np.ndarray:
+                self.now = now[m]
+                calculation.draw(frame,self.now,type = self.drawPoint)
             frame=cv2.cvtColor(frame,cv2.COLOR_RGB2BGR)
             imge = QImage(frame.data,frame.shape[1],frame.shape[0],QImage.Format_RGB888)
             self.imgLabel.setPixmap(QPixmap.fromImage(imge))
@@ -534,7 +541,7 @@ class GoPose(Ui_MainWindow,QMainWindow):
                         ind_l = 0
                         if self.fps > 0:
                             ind_l = self.data[self.fps-1][0]  # 前一帧解析点坐标
-                        result = calculation.para(ind,ind_l,self.fps_video,self.pc,self.rotationAngle) 
+                        result = calculation.para(ind,ind_l,self.fpsRate,self.pc,self.rotationAngle) 
                         for key,value in result.items():
                             count = self.tableWidget.rowCount()
                             self.tableWidget.insertRow(count)  # 新增行
@@ -549,8 +556,6 @@ class GoPose(Ui_MainWindow,QMainWindow):
                     newItem = QTableWidgetItem('缺少解析点数据')
                     self.tableWidget.setItem(0,0,newItem)
                     
-                
-
     '''-----比例尺-----'''
     def scaleButton(self):
         self.scale = True
@@ -607,11 +612,11 @@ class GoPose(Ui_MainWindow,QMainWindow):
                 path = QFileDialog.getSaveFileName(self, '保存视频', os.getcwd(), "MP4(*.mp4)")
                 if path[0]:
                     cap = cv2.VideoCapture(self.video) 
-                    fps_video = cap.get(cv2.CAP_PROP_FPS)  # 获取视频帧率
+                    fpsRate = cap.get(cv2.CAP_PROP_FPS)  # 获取视频帧率
                     fourcc = cv2.VideoWriter_fourcc(*"mp4v")  # 设置写入视频的编码格式
                     frame_width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))  # 获取视频宽度
                     frame_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))  # 获取视频高度
-                    videoWriter = cv2.VideoWriter(path[0], fourcc, fps_video, (frame_width, frame_height))
+                    videoWriter = cv2.VideoWriter(path[0], fourcc, fpsRate, (frame_width, frame_height))
                     i = 0
                     while cap:
                         ret,fram = cap.read()
@@ -650,11 +655,11 @@ class GoPose(Ui_MainWindow,QMainWindow):
             path = QFileDialog.getSaveFileName(self, '保存视频', os.getcwd(), "MP4(*.mp4)")
             if path[0]:
                 cap = cv2.VideoCapture(self.video) 
-                fps_video = cap.get(cv2.CAP_PROP_FPS)  # 获取视频帧率
+                fpsRate = cap.get(cv2.CAP_PROP_FPS)  # 获取视频帧率
                 fourcc = cv2.VideoWriter_fourcc(*"mp4v")  # 设置写入视频的编码格式
                 frame_width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))  # 获取视频宽度
                 frame_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))  # 获取视频高度
-                videoWriter = cv2.VideoWriter(path[0], fourcc, fps_video, (frame_width, frame_height))
+                videoWriter = cv2.VideoWriter(path[0], fourcc, fpsRate, (frame_width, frame_height))
                 i = 0
                 while cap:
                     ret,fram = cap.read()
@@ -707,7 +712,7 @@ class GoPose(Ui_MainWindow,QMainWindow):
                             now  = self.data[f][0]
                             if f > 0:
                                 last = self.data[f-1][0]
-                            result = calculation.para(now, last, self.fps_video, self.pc, self.rotationAngle) 
+                            result = calculation.para(now, last, self.fpsRate, self.pc, self.rotationAngle) 
                             if t == True:
                                 title = ['帧数']
                                 for key in result.keys():
@@ -729,7 +734,7 @@ class GoPose(Ui_MainWindow,QMainWindow):
                             now  = self.data[f][0]
                             if f > 0:
                                 last = self.data[f-1][0]
-                            result = calculation.para(now, last, self.fps_video, self.pc, self.rotationAngle) 
+                            result = calculation.para(now, last, self.fpsRate, self.pc, self.rotationAngle) 
                             if f == 0:
                                 title = ['帧数']
                                 for key in result.keys():
@@ -782,13 +787,13 @@ class GoPose(Ui_MainWindow,QMainWindow):
         if self.play2:
             self.play2 = False
             icon7 = QIcon()
-            icon7.addPixmap(QPixmap("d:\\Code\\github\\GoPose\\UI\\../Icon/播放(1).png"), QIcon.Normal, QIcon.Off)
+            icon7.addPixmap(QPixmap("Icon/播放(1).png"), QIcon.Normal, QIcon.Off)
             self.pushButton_10.setIcon(icon7)
             self.pushButton_10.setIconSize(QSize(48, 48))
         else:
             self.play2 = True 
             icon72 = QIcon()
-            icon72.addPixmap(QPixmap("d:\\Code\\github\\GoPose\\UI\\../Icon/暂停.png"), QIcon.Normal, QIcon.Off)
+            icon72.addPixmap(QPixmap("Icon/暂停.png"), QIcon.Normal, QIcon.Off)
             self.pushButton_10.setIcon(icon72)
             self.pushButton_10.setIconSize(QSize(48, 48))
         cap = self.cap
@@ -808,7 +813,7 @@ class GoPose(Ui_MainWindow,QMainWindow):
                 self.horizontalSlider.setSliderPosition(0)
                 self.play2 = False
                 icon7 = QIcon()
-                icon7.addPixmap(QPixmap("d:\\Code\\github\\GoPose\\UI\\../Icon/播放(1).png"), QIcon.Normal, QIcon.Off)
+                icon7.addPixmap(QPixmap("Icon/播放(1).png"), QIcon.Normal, QIcon.Off)
                 self.pushButton_10.setIcon(icon7)
                 self.pushButton_10.setIconSize(QSize(48, 48))
                 break
@@ -851,7 +856,7 @@ class GoPose(Ui_MainWindow,QMainWindow):
         now = self.fps
         self.timePoint.append(now)
         if len(self.timePoint) >= 2:
-            time = (self.timePoint[1] - self.timePoint[0])/self.fps_video
+            time = (self.timePoint[1] - self.timePoint[0])/self.fpsRate
             self.timePoint = []
             text = '当前测量时间：{}秒'.format(round(time,2))
             name, ok = QInputDialog.getText(self, '测量时间', text, QLineEdit.Normal, '输入该时间名称并在结果中显示')
