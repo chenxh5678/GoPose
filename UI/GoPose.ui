@@ -1072,6 +1072,7 @@ QPushButton:hover{background-color:rgb(255, 255, 255);border-radius: 10px;paddin
     <addaction name="actiondrawType"/>
     <addaction name="actionLevel"/>
     <addaction name="actionFont"/>
+    <addaction name="actionFilter"/>
    </widget>
    <widget class="QMenu" name="menu_2">
     <property name="title">
@@ -1606,6 +1607,14 @@ QPushButton:hover{background-color:rgb(255, 255, 255);border-radius: 10px;paddin
    </property>
    <property name="text">
     <string>显示窗口字体大小</string>
+   </property>
+  </action>
+  <action name="actionFilter">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>数据滤波平滑</string>
    </property>
   </action>
  </widget>
