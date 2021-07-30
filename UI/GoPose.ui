@@ -1073,6 +1073,7 @@ QPushButton:hover{background-color:rgb(255, 255, 255);border-radius: 10px;paddin
     <addaction name="actionLevel"/>
     <addaction name="actionFont"/>
     <addaction name="actionFilter"/>
+    <addaction name="actionlineSize"/>
    </widget>
    <widget class="QMenu" name="menu_2">
     <property name="title">
@@ -1615,6 +1616,18 @@ QPushButton:hover{background-color:rgb(255, 255, 255);border-radius: 10px;paddin
    </property>
    <property name="text">
     <string>数据滤波平滑</string>
+   </property>
+  </action>
+  <action name="actionlineSize">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>../Icon/线.png</normaloff>../Icon/线.png</iconset>
+   </property>
+   <property name="text">
+    <string>调整解析点尺寸</string>
    </property>
   </action>
  </widget>

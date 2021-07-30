@@ -11,13 +11,13 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>保存</string>
+   <string>Dialog</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string>保存范围</string>
+      <string>执行范围</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>

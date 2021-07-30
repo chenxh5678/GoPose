@@ -1,6 +1,8 @@
 import cv2
+import numpy as np
 import math
 from modules.center import core
+import random
 
 # 3点求角度
 def degree(A,B,C):  # A上端点，B中间点夹角点，C下端点
@@ -104,17 +106,18 @@ def para(frame_now,frame_last,fps_video,pc,r):  # 当前帧，上一帧，帧率
         return result
 
 # 显示棍图
-def draw(frame,now,type = 0):
+def draw(frame, now, lineSize, type = 0):
     try:
+        circleSize = lineSize * 2
         def line(frame,p0,p1,color):  # 画线
             if p0 != (0.0,0.0) and p1 != (0.0,0.0):
-                cv2.line(frame,p0,p1,color, 2)
-                cv2.circle(frame,p1,5,color,-1)
+                cv2.line(frame,p0,p1,color, lineSize)
+                cv2.circle(frame, p1, circleSize, color, -1)
         def p(num):  # 取25坐标点
             return (now[num][0],now[num][1])  # 把self.now改为now   
         if type == 0:
                 core1 = core(now)
-                cv2.circle(frame,core1,4,(255,200,0),2)  # 重心
+                cv2.circle(frame, core1, circleSize + 1, (255,200,0), lineSize)  # 重心
                 body = (255,255,255)  # 躯干颜色  RGB51,204,153  BGR
                 rUpperLimb = (255,102,0)  # 右上肢颜色
                 lUpperLimb = (0,255,102)  # 左上肢颜色

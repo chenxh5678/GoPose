@@ -23,7 +23,9 @@ GoPose是人体姿态关键点自动识别、编辑软件；运动学分析软�
 - [ ] 滤波平滑功能
 - [ ] 合成三维坐标点功能
 - [ ] 完善摄像头采集功能
-- [ ] 显示坐标点轨迹
+- [ ] 显示坐标点轨迹模式
+- [ ] 更多的人体惯性参数模型
+- [ ] 测试对象信息栏的应用
 ## Related Efforts
 自动姿态识别功能来源：
 - [OpenPose](https://github.com/CMU-Perceptual-Computing-Lab/openpose)

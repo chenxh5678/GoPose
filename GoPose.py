@@ -1,5 +1,3 @@
-#  Author: Xihang Chen
-#  Email: 786028450@qq.com
 import sys,cv2,pickle,os,csv,math
 from UI.Ui_GoPose import Ui_MainWindow
 from PyQt5.QtWidgets import (QApplication,QMainWindow,QTableWidgetItem,QLineEdit,
@@ -45,6 +43,7 @@ class GoPose(Ui_MainWindow,QMainWindow):
         self.drawPoint = 0
         self.play2 = False  # 播放状态
         self.changFlag = 0  # 播放暂停图标
+        self.lSize = 2  # 解析点图像粗细
         self.cwd = os.getcwd() # 获取当前程序文件位置
         self.sli_label()  # 显示滑动条状态
         self.tableWidget.setSelectionBehavior(QAbstractItemView.SelectRows)
@@ -77,6 +76,7 @@ class GoPose(Ui_MainWindow,QMainWindow):
         self.actionLevel.triggered.connect(self.levelButton)
         self.actionOutPara.triggered.connect(self.exportResults)
         self.actionFont.triggered.connect(self.fontSize)
+        self.actionlineSize.triggered.connect(self.lineSize)
 
     def button(self):
         self.pushButton.clicked.connect(self.last)
@@ -179,7 +179,7 @@ class GoPose(Ui_MainWindow,QMainWindow):
     def text(self,i=0):
         if i:
             video_name = self.video.split('/')[-1]
-            text = 'Video:{}        Size:{}        FPS:{}       解析点人数：{}      画面旋转角：{}°'.format(video_name,self.shape, self.fpsRate,self.member_, self.rotationAngle)
+            text = 'Video:{}        Size:{}        FPS:{}       显示解析人数：{}      画面旋转角：{}°'.format(video_name,self.shape, self.fpsRate,self.member_, self.rotationAngle)
             self.label_2.setText(text)
         else:
             video_name = self.video.split('/')[-1]
@@ -340,7 +340,7 @@ class GoPose(Ui_MainWindow,QMainWindow):
                         now = self.currentKeys()
                         if type(now) == np.ndarray:
                             for d in now:  # 显示                              
-                                calculation.draw(frame,d,type = self.drawPoint)
+                                calculation.draw(frame, d, self.lSize, type = self.drawPoint)
                             self.showResult()  # 计算参数
                 frame=cv2.cvtColor(frame,cv2.COLOR_RGB2BGR)
                 imge = QImage(frame.data,frame.shape[1],frame.shape[0],QImage.Format_RGB888)
@@ -353,6 +353,7 @@ class GoPose(Ui_MainWindow,QMainWindow):
         ok = QMessageBox.information(self,'消息','打开摄像头',QMessageBox.Yes | QMessageBox.No,QMessageBox.Yes)
         if ok == 16384:
             path = QFileDialog.getSaveFileName(self, '录像保存位置', os.getcwd(), "MP4(*.mp4)")
+            # v = 'http://admin:admin@192.168.3.146:8081'
             cap = cv2.VideoCapture(0)
             fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # 设置写入视频的编码格式
             out = cv2.VideoWriter(path[0],fourcc, 20.0, (640,480))
@@ -387,7 +388,7 @@ class GoPose(Ui_MainWindow,QMainWindow):
                     now = self.currentKeys()  
                     if type(now) == np.ndarray:              
                         for d in now:  # 显示
-                            calculation.draw(frame,d,type = self.drawPoint)
+                            calculation.draw(frame,d,self.lSize, type = self.drawPoint)
                     frame=cv2.cvtColor(frame,cv2.COLOR_RGB2BGR)
                     imge = QImage(frame.data,frame.shape[1],frame.shape[0],QImage.Format_RGB888)
                     self.imgLabel.setPixmap(QPixmap(imge))
@@ -399,6 +400,7 @@ class GoPose(Ui_MainWindow,QMainWindow):
                     self.actionOne.setEnabled(True)
                     self.actionSave.setEnabled(True)
                     self.actionOutVideo.setEnabled(True)
+                    self.actionlineSize.setEnabled(True)
                     self.showResult()
             except Exception as e:
                 QMessageBox.warning(self,'载入解析点错误',str(e))
@@ -454,7 +456,7 @@ class GoPose(Ui_MainWindow,QMainWindow):
                         cap = self.cap
                         cap.set(cv2.CAP_PROP_POS_FRAMES,self.fps)  
                         rval,frame = cap.read()
-                        calculation.draw(frame,now,type = self.drawPoint)
+                        calculation.draw(frame,now,self.lSize, type = self.drawPoint)
                         frame=cv2.cvtColor(frame,cv2.COLOR_RGB2BGR)
                         imge = QImage(frame.data,frame.shape[1],frame.shape[0],QImage.Format_RGB888)
                         self.imgLabel.setPixmap(QPixmap.fromImage(imge))
@@ -492,7 +494,7 @@ class GoPose(Ui_MainWindow,QMainWindow):
             now = self.currentKeys()
             if type(now) == np.ndarray:
                 self.now = now[m]
-                calculation.draw(frame,self.now,type = self.drawPoint)
+                calculation.draw(frame,self.now,self.lSize, type = self.drawPoint)
             frame=cv2.cvtColor(frame,cv2.COLOR_RGB2BGR)
             imge = QImage(frame.data,frame.shape[1],frame.shape[0],QImage.Format_RGB888)
             self.imgLabel.setPixmap(QPixmap.fromImage(imge))
@@ -626,7 +628,7 @@ class GoPose(Ui_MainWindow,QMainWindow):
                                         if self.pkl:
                                             now = self.data[i]
                                             for d in now:                               
-                                                calculation.draw(fram,d,type = self.drawPoint)
+                                                calculation.draw(fram,d,self.lSize, type = self.drawPoint)
                                         videoWriter.write(fram)
                                         cv2.imshow('Video exporting...(Press ESC to Exit)',fram)
                                         if cv2.waitKey(20) & 0xFF == 27:
@@ -638,7 +640,7 @@ class GoPose(Ui_MainWindow,QMainWindow):
                                 if self.pkl:
                                     now = self.data[i]
                                     for d in now:                               
-                                        calculation.draw(fram,d,type = self.drawPoint)
+                                        calculation.draw(fram,d,self.lSize, type = self.drawPoint)
                                 videoWriter.write(fram)
                                 cv2.imshow('Video exporting...(Press ESC to Exit)',fram)
                                 if cv2.waitKey(20) & 0xFF == 27:
@@ -786,13 +788,13 @@ class GoPose(Ui_MainWindow,QMainWindow):
         if self.play2:
             self.play2 = False
             icon7 = QIcon()
-            icon7.addPixmap(QPixmap("Icon/播放(1).png"), QIcon.Normal, QIcon.Off)
+            icon7.addPixmap(QPixmap("d:\\Code\\github\\GoPose\\UI\\../Icon/播放(1).png"), QIcon.Normal, QIcon.Off)
             self.pushButton_10.setIcon(icon7)
             self.pushButton_10.setIconSize(QSize(48, 48))
         else:
             self.play2 = True 
             icon72 = QIcon()
-            icon72.addPixmap(QPixmap("Icon/暂停.png"), QIcon.Normal, QIcon.Off)
+            icon72.addPixmap(QPixmap("d:\\Code\\github\\GoPose\\UI\\../Icon/暂停.png"), QIcon.Normal, QIcon.Off)
             self.pushButton_10.setIcon(icon72)
             self.pushButton_10.setIconSize(QSize(48, 48))
         cap = self.cap
@@ -812,7 +814,7 @@ class GoPose(Ui_MainWindow,QMainWindow):
                 self.horizontalSlider.setSliderPosition(0)
                 self.play2 = False
                 icon7 = QIcon()
-                icon7.addPixmap(QPixmap("Icon/播放(1).png"), QIcon.Normal, QIcon.Off)
+                icon7.addPixmap(QPixmap("d:\\Code\\github\\GoPose\\UI\\../Icon/播放(1).png"), QIcon.Normal, QIcon.Off)
                 self.pushButton_10.setIcon(icon7)
                 self.pushButton_10.setIconSize(QSize(48, 48))
                 break
@@ -928,6 +930,11 @@ class GoPose(Ui_MainWindow,QMainWindow):
             font = QFont()
             font.setPointSize(size)
             self.tableWidget.setFont(font)
+
+    def lineSize(self):
+        size,ok = QInputDialog.getInt(self,'解析点大小','',2,1,50,1)
+        if ok and size:
+            self.lSize = size
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

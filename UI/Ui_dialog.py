@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'd:\Code\github\GoPose\UI\dialog_save.ui'
+# Form implementation generated from reading ui file 'd:\Code\Python Project\GoPose\UI\dialog.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.2
 #
@@ -29,8 +29,9 @@ class Ui_Dialog(object):
         self.radioButton.setObjectName("radioButton")
         self.verticalLayout.addWidget(self.radioButton)
         self.radioButton_2 = QtWidgets.QRadioButton(self.groupBox)
+        self.radioButton_2.setEnabled(True)
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("Icon/录像.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon1.addPixmap(QtGui.QPixmap("Icon/概率.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.radioButton_2.setIcon(icon1)
         self.radioButton_2.setObjectName("radioButton_2")
         self.verticalLayout.addWidget(self.radioButton_2)
@@ -48,7 +49,7 @@ class Ui_Dialog(object):
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
-        Dialog.setWindowTitle(_translate("Dialog", "保存"))
-        self.groupBox.setTitle(_translate("Dialog", "保存范围"))
+        Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
+        self.groupBox.setTitle(_translate("Dialog", "执行范围"))
         self.radioButton.setText(_translate("Dialog", "全时长"))
         self.radioButton_2.setText(_translate("Dialog", "工作区"))
