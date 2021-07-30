@@ -6,9 +6,9 @@ GoPose是人体姿态关键点自动识别、编辑软件；运动学分析软�
 最近闲，实现一下当年的想法  
 ## Installation
 ### 环境
-推荐环境Window10、python3.7、CUDA11.2
+推荐Window10、python3.7、CUDA11.2
 ### 下载GoPose存储库
-Windows：可以Download ZIP或使用GitHub桌面或从Powershell克隆
+Windows：可以Download ZIP或使用GitHub桌面或从Powershell克隆  
 在cmd控制台，按需求文档requirements.txt安装库
 ### 配置OpenPose
 1 首先需要安装好OpenPose（[官方文档](https://github.com/CMU-Perceptual-Computing-Lab/openpose)、[bilibili](https://www.bilibili.com/video/BV1WV411v7aj)）  
