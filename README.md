@@ -11,6 +11,5 @@ GoPose是人体姿态关键点自动识别、编辑软件，同时可作为运�
 ## 相关项目
 自动识别功能来源  
 [OpenPose](https://github.com/CMU-Perceptual-Computing-Lab/openpose)
-## 项目负责人
-Xihang Chen
+
 ## License
