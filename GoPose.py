@@ -1,6 +1,5 @@
 #  Author: Xihang Chen
 #  Email: 786028450@qq.com
-
 import sys,cv2,pickle,os,csv,math
 from UI.Ui_GoPose import Ui_MainWindow
 from PyQt5.QtWidgets import (QApplication,QMainWindow,QTableWidgetItem,QLineEdit,
