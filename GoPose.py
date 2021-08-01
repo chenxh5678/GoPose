@@ -1,3 +1,5 @@
+#  Author: Xihang Chen
+#  Email: 786028450@qq.com
 import sys,cv2,pickle,os,csv,math
 from UI.Ui_GoPose import Ui_MainWindow
 from PyQt5.QtWidgets import (QApplication,QMainWindow,QTableWidgetItem,QLineEdit,
@@ -537,19 +539,21 @@ class GoPose(Ui_MainWindow,QMainWindow):
                         newItem=QTableWidgetItem(str(value))
                         self.tableWidget.setItem(count,1,newItem)
                 if self.pkl:  # 显示解析点
-                    if self.data[self.fps].shape[0] == 1:  # 显示解析点结果
-                        ind = self.data[self.fps][0]  # 当前帧的解析点
-                        ind_l = 0
-                        if self.fps > 0:
-                            ind_l = self.data[self.fps-1][0]  # 前一帧解析点坐标
-                        result = calculation.para(ind,ind_l,self.fpsRate,self.pc,self.rotationAngle) 
-                        for key,value in result.items():
-                            count = self.tableWidget.rowCount()
-                            self.tableWidget.insertRow(count)  # 新增行
-                            newItem=QTableWidgetItem(key)
-                            self.tableWidget.setItem(count,0,newItem)
-                            newItem=QTableWidgetItem(str(value))
-                            self.tableWidget.setItem(count,1,newItem)
+                    if type(self.data[self.fps]) == np.ndarray:
+                        if self.data[self.fps].shape[0] == 1:  # 如果只有一人则显示解析点结果
+                            ind = self.data[self.fps][0]  # 当前帧的解析点
+                            ind_l = 0
+                            if self.fps > 0:
+                                if type(self.data[self.fps - 1]) == np.ndarray:
+                                    ind_l = self.data[self.fps-1][0]  # 前一帧解析点坐标
+                            result = calculation.para(ind,ind_l,self.fpsRate,self.pc,self.rotationAngle) 
+                            for key,value in result.items():
+                                count = self.tableWidget.rowCount()
+                                self.tableWidget.insertRow(count)  # 新增行
+                                newItem=QTableWidgetItem(key)
+                                self.tableWidget.setItem(count,0,newItem)
+                                newItem=QTableWidgetItem(str(value))
+                                self.tableWidget.setItem(count,1,newItem)
                 if self.pkl or self.longDic or self.timeDic:
                     pass
                 else:
