@@ -681,73 +681,93 @@ class GoPose(Ui_MainWindow,QMainWindow):
                 cv2.destroyAllWindows()
 
     def exportKeys(self):  # 导出解析点数据
-        path = QFileDialog.getSaveFileName(self, '导出坐标点', os.getcwd(), "CSV(*.csv)")
-        name = ['0 鼻子', '1 脖子', '2 右肩', '3 右肘','4 右腕','5 左肩','6 左肘','7 左腕','8 中臀','9 右臀',
-                '10 右膝','11 右踝','12 左臀','13 左膝','14 左踝','15 右眼','16 左眼','17 右耳','18 左耳',
-                '19 左大拇指','20 左小拇指','21 左足跟','22 右大拇指','23 右小拇指','24 右足跟']
-        title = []
-        for n in name:
-            title.append(n + 'X')
-            title.append(n + 'Y')
-        with open(path[0], 'w', newline = '') as file1:
-            f = csv.writer(file1)
-            f.writerow(title)
-            if self.data:
-                for d in self.data:    
-                    d1 = np.delete(d[0],-1,axis = 1)     
-                    line = d1.flatten()  # 转成一维数组
-                    f.writerow(line)        
-        QMessageBox.information(self, '消息', '坐标点数据已导出')
+        radio,ok= Dialog.getResult(self)
+        if ok:
+            path = QFileDialog.getSaveFileName(self, '导出坐标点', os.getcwd(), "CSV(*.csv)")
+            if path:
+                name = ['0 鼻子', '1 脖子', '2 右肩', '3 右肘','4 右腕','5 左肩','6 左肘','7 左腕','8 中臀','9 右臀',
+                        '10 右膝','11 右踝','12 左臀','13 左膝','14 左踝','15 右眼','16 左眼','17 右耳','18 左耳',
+                        '19 左大拇指','20 左小拇指','21 左足跟','22 右大拇指','23 右小拇指','24 右足跟']
+                title = []
+                for n in name:
+                    title.append(n + 'X')
+                    title.append(n + 'Y')
+                with open(path[0], 'w', newline = '') as file1:
+                        f = csv.writer(file1)
+                        f.writerow(title)
+                        if self.data:
+                            if radio:
+                                if self.cut1 != None and self.cut2:
+                                    data = self.data[self.cut1:self.cut2 + 1]
+                                    for d in data:
+                                        if type(d) == np.ndarray:     
+                                            d1 = np.delete(d[0],-1,axis = 1)     
+                                            line = d1.flatten()  # 转成一维数组
+                                            f.writerow(line)   
+                                        else:
+                                            f.writerow('空')     
+                                    QMessageBox.information(self, '消息', '坐标点数据已导出')
+                            else:
+                                for d in self.data:
+                                    if type(d) == np.ndarray:    
+                                        d1 = np.delete(d[0],-1,axis = 1)     
+                                        line = d1.flatten()  # 转成一维数组
+                                        f.writerow(line)   
+                                    else:
+                                        f.writerow('空')     
+                                QMessageBox.information(self, '消息', '坐标点数据已导出')
     
     def exportResults(self):  # 导出结果
-        name = QFileDialog.getSaveFileName(self, '导出运动学结果', self.cwd, "CSV Files (*.csv)")
-        if name[0]:
-            with open(name[0], 'w', newline='') as file1:
-                file0 = csv.writer(file1)
-                last = 0
-                t = True
-                f_num = 0
-                if self.cut1 != None and self.cut2 != None:
-                    for f in range(self.cut1,self.cut2 + 1):
-                        try:
-                            now  = self.data[f][0]
-                            if f > 0:
-                                last = self.data[f-1][0]
-                            result = calculation.para(now, last, self.fpsRate, self.pc, self.rotationAngle) 
-                            if t == True:
-                                title = ['帧数']
-                                for key in result.keys():
-                                    title.append(key)
-                                file0.writerow(title)
-                                t = False
-                            row_v = [f_num]
-                            for value in result.values():
-                                row_v.append(value)
-                            file0.writerow(row_v)
-                            f_num += 1
-                        except Exception as e:
-                            print(e)
-                            break
-                            
-                else:
-                    for f in range(len(self.data)):
-                        try:
-                            now  = self.data[f][0]
-                            if f > 0:
-                                last = self.data[f-1][0]
-                            result = calculation.para(now, last, self.fpsRate, self.pc, self.rotationAngle) 
-                            if f == 0:
-                                title = ['帧数']
-                                for key in result.keys():
-                                    title.append(key)
-                                file0.writerow(title)
-                            row_v = [f]
-                            for value in result.values():
-                                row_v.append(value)
-                            file0.writerow(row_v)
-                        except Exception as e:
-                            print(e)
-                            break
+        radio,ok= Dialog.getResult(self)
+        if ok:
+            name = QFileDialog.getSaveFileName(self, '导出运动学结果', self.cwd, "CSV Files (*.csv)")
+            if name[0]:
+                with open(name[0], 'w', newline='') as file1:
+                    file0 = csv.writer(file1)
+                    last = 0
+                    t = True
+                    f_num = 0
+                    if radio:
+                        if self.cut1 != None and self.cut2:
+                            for f in range(self.cut1,self.cut2 + 1):
+                                try:
+                                    now  = self.data[f][0]
+                                    if f > 0:
+                                        last = self.data[f-1][0]
+                                    result = calculation.para(now, last, self.fpsRate, self.pc, self.rotationAngle) 
+                                    if t == True:
+                                        title = ['帧数']
+                                        for key in result.keys():
+                                            title.append(key)
+                                        file0.writerow(title)
+                                        t = False
+                                    row_v = [f_num]
+                                    for value in result.values():
+                                        row_v.append(value)
+                                    file0.writerow(row_v)
+                                    f_num += 1
+                                except Exception as e:
+                                    print(e)
+                                    break     
+                    else:
+                        for f in range(len(self.data)):
+                            try:
+                                now  = self.data[f][0]
+                                if f > 0:
+                                    last = self.data[f-1][0]
+                                result = calculation.para(now, last, self.fpsRate, self.pc, self.rotationAngle) 
+                                if f == 0:
+                                    title = ['帧数']
+                                    for key in result.keys():
+                                        title.append(key)
+                                    file0.writerow(title)
+                                row_v = [f]
+                                for value in result.values():
+                                    row_v.append(value)
+                                file0.writerow(row_v)
+                            except Exception as e:
+                                print(e)
+                                break
 
     '''-----选择工作区-----'''
     def workspaceStart(self):
