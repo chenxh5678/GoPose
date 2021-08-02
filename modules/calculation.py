@@ -83,7 +83,7 @@ def para(frame_now,frame_last,fps_video,pc,r):  # 当前帧，上一帧，帧率
         # Fx = None
         # Fy = None
         # Px = None
-        if type(frame_last) != int:  # 如果不是整型，说明不是第一帧
+        if type(frame_last) != int and frame_last is not None:  # 如果不是整型，说明不是第一帧
             ind_l = frame_last  # 前一帧关键点坐标
             core0 = core(ind_l) 
             # 角速度

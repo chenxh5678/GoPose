@@ -441,7 +441,9 @@ class GoPose(Ui_MainWindow,QMainWindow):
     
     def modifyKey(self):  # 修改解析坐标点
         try:
-            item = self.treeWidget.currentItem().checkState(0)
+            item = self.treeWidget.currentItem()
+            if item:
+                item = item.checkState(0)
             if item == 2 and self.pkl:
                 if type(self.data[self.fps]) == np.ndarray:
                     if self.data[self.fps].shape[0] == 1:
@@ -643,8 +645,9 @@ class GoPose(Ui_MainWindow,QMainWindow):
                             else:
                                 if self.pkl:
                                     now = self.data[i]
-                                    for d in now:                               
-                                        calculation.draw(fram,d,self.lSize, type = self.drawPoint)
+                                    if type(now) == np.ndarray:
+                                        for d in now:                               
+                                            calculation.draw(fram,d,self.lSize, type = self.drawPoint)
                                 videoWriter.write(fram)
                                 cv2.imshow('Video exporting...(Press ESC to Exit)',fram)
                                 if cv2.waitKey(20) & 0xFF == 27:
@@ -722,56 +725,41 @@ class GoPose(Ui_MainWindow,QMainWindow):
                                 QMessageBox.information(self, '消息', '坐标点数据已导出')
     
     def exportResults(self):  # 导出结果
-        radio,ok= Dialog.getResult(self)
-        if ok:
-            name = QFileDialog.getSaveFileName(self, '导出运动学结果', self.cwd, "CSV Files (*.csv)")
+        last = 0
+        t = True
+        f_num = 0
+        if self.cut1 != None and self.cut2:
+            name = QFileDialog.getSaveFileName(self, '导出工作区运动学结果', self.cwd, "CSV Files (*.csv)")
             if name[0]:
                 with open(name[0], 'w', newline='') as file1:
                     file0 = csv.writer(file1)
-                    last = 0
-                    t = True
-                    f_num = 0
-                    if radio:
-                        if self.cut1 != None and self.cut2:
-                            for f in range(self.cut1,self.cut2 + 1):
-                                try:
-                                    now  = self.data[f][0]
-                                    if f > 0:
-                                        last = self.data[f-1][0]
-                                    result = calculation.para(now, last, self.fpsRate, self.pc, self.rotationAngle) 
-                                    if t == True:
-                                        title = ['帧数']
-                                        for key in result.keys():
-                                            title.append(key)
-                                        file0.writerow(title)
-                                        t = False
-                                    row_v = [f_num]
-                                    for value in result.values():
-                                        row_v.append(value)
-                                    file0.writerow(row_v)
-                                    f_num += 1
-                                except Exception as e:
-                                    print(e)
-                                    break     
-                    else:
-                        for f in range(len(self.data)):
-                            try:
-                                now  = self.data[f][0]
-                                if f > 0:
-                                    last = self.data[f-1][0]
-                                result = calculation.para(now, last, self.fpsRate, self.pc, self.rotationAngle) 
-                                if f == 0:
-                                    title = ['帧数']
-                                    for key in result.keys():
-                                        title.append(key)
-                                    file0.writerow(title)
-                                row_v = [f]
-                                for value in result.values():
-                                    row_v.append(value)
-                                file0.writerow(row_v)
-                            except Exception as e:
-                                print(e)
-                                break
+                    for f in range(self.cut1,self.cut2 + 1):
+                        try:
+                            now  = self.data[f][0]
+                            if f > 0:
+                                last = self.data[f-1]
+                                if type(last) == np.ndarray:
+                                    last = last[0]
+                            result = calculation.para(now, last, self.fpsRate, self.pc, self.rotationAngle) 
+                            if t == True:
+                                title = ['帧数']
+                                for key in result.keys():
+                                    title.append(key)
+                                file0.writerow(title)
+                                t = False
+                            row_v = [f_num]
+                            for value in result.values():
+                                row_v.append(value)
+                            file0.writerow(row_v)
+                            f_num += 1
+                        except TypeError:
+                            QMessageBox.warning(self,'导出工作区运动学结果错误','工作区内必须存在解析点图像')
+                            break
+                        except Exception as e:
+                            QMessageBox.warning(self,'导出工作区运动学结果错误',str(e))
+                            break     
+        else:
+            QMessageBox.warning(self,'导出工作区运动学结果错误','请设置单人解析点有效工作区')
 
     '''-----选择工作区-----'''
     def workspaceStart(self):
