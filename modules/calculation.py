@@ -66,7 +66,12 @@ def para(frame_now,frame_last,fps_video,pc,r):  # 当前帧，上一帧，帧率
         lShankH = level(ind[13],ind[14],r)
         # 重心距离
         core1 = core(ind)  # 当前帧重心坐标
-        # rCoreFoot = round((core1[0] - ind[22][0])/pc,2)
+        if pc != None:
+            rCoreFoot = round(abs(core1[0] - ind[22][0])/pc, 2)
+            lCoreFoot = round(abs(core1[0] - ind[19][0])/pc, 2)
+        else:
+            rCoreFoot = '比例尺缺失'
+            lCoreFoot = '比例尺缺失'
         speed_x = None
         speed_y = None
         # r_hip_w = None
@@ -98,11 +103,12 @@ def para(frame_now,frame_last,fps_video,pc,r):  # 当前帧，上一帧，帧率
             else:
                 speed_x = '比例尺缺失'
                 speed_y = '比例尺缺失'
-        result = {'右髋角(°)':r_hip, '左髋角(°)':l_hip, '右膝角(°)':r_knee, '左膝角(°)':l_knee, '右踝角(°)':rAnkle, '左踝角(°)':lAnkle, 
+        result = {'重心坐标':core1,
+                '右髋角(°)':r_hip, '左髋角(°)':l_hip, '右膝角(°)':r_knee, '左膝角(°)':l_knee, '右踝角(°)':rAnkle, '左踝角(°)':lAnkle, 
                 '躯干-垂线角(°)':bodyV, '右大腿-水平角(°)':rThighH, '左大腿-水平角(°)':lThighH, '右小腿-水平角(°)':rShankH, '左小腿-水平角(°)':lShankH, 
-                
-                '重心坐标':core1,'水平速度(m/s)':speed_x, '垂直速度(m/s)':speed_y}   #  '水平加速度(m/s2)':ax, '垂直加速度(m/s2)':ay, '地面水平力(N)':Fx, '地面垂直力(N)':Fy, 'x功率(W)':Px
-                # '右髋角速度(°/s)':r_hip_w, '左髋角速度(°/s)':l_hip_w, '右膝角速度(°/s)':r_knee_w, '左膝角速度(°/s)':l_knee_w, '右肘角(°)':r_elbow, '左肘角(°)':l_elbow, '重心右足水平距离':rCoreFoot, 
+                '重心右足水平距离':rCoreFoot, '重心左足水平距离':lCoreFoot, '水平速度(m/s)':speed_x, '垂直速度(m/s)':speed_y
+                }   #  '水平加速度(m/s2)':ax, '垂直加速度(m/s2)':ay, '地面水平力(N)':Fx, '地面垂直力(N)':Fy, 'x功率(W)':Px
+                # '右髋角速度(°/s)':r_hip_w, '左髋角速度(°/s)':l_hip_w, '右膝角速度(°/s)':r_knee_w, '左膝角速度(°/s)':l_knee_w, '右肘角(°)':r_elbow, '左肘角(°)':l_elbow,  
         return result
 
 # 显示棍图
