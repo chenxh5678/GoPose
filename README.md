@@ -17,9 +17,9 @@ GoPose人工智能运动分析系统,可完成人体姿态25个关键点自动�
 - 将openpose文件夹中，`models`文件夹复制到`GoPose/resource/`中，替换同名文件,目前只用到`pose/body25/pose_iter_584000.caffemodel`  
 - `openpose/build/python/openpose/Release/`内3个文件复制到`GoPose/resource/`内替换  
 - `openpose/build/x64/Release/`内的openpose.dll复制到`GoPose/resource/`内替换  
-![image](https://github.com/chenxh5678/GoPose/blob/main/README/Image/bin.png)  
-![image](https://github.com/chenxh5678/GoPose/blob/main/README/Image/models.png)  
-![image](https://github.com/chenxh5678/GoPose/blob/main/README/Image/resource.png)  
+- ![image](https://github.com/chenxh5678/GoPose/blob/main/README/Image/bin.png)  
+- ![image](https://github.com/chenxh5678/GoPose/blob/main/README/Image/models.png)  
+- ![image](https://github.com/chenxh5678/GoPose/blob/main/README/Image/resource.png)  
 ## 使用方法
 执行GoPose.py文件  
 [示例]()
