@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>GoPose</string>
+   <string>GoPose </string>
   </property>
   <property name="autoFillBackground">
    <bool>true</bool>
@@ -1079,6 +1079,7 @@ QPushButton:hover{background-color:rgb(255, 255, 255);border-radius: 10px;paddin
     <property name="title">
      <string>帮助（&amp;H)</string>
     </property>
+    <addaction name="actionHelp"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menu_V"/>
@@ -1628,6 +1629,11 @@ QPushButton:hover{background-color:rgb(255, 255, 255);border-radius: 10px;paddin
    </property>
    <property name="text">
     <string>调整解析点尺寸</string>
+   </property>
+  </action>
+  <action name="actionHelp">
+   <property name="text">
+    <string>Help</string>
    </property>
   </action>
  </widget>
