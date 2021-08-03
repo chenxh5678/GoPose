@@ -288,6 +288,7 @@ class GoPose(Ui_MainWindow,QMainWindow):
         if self.video:
             try:
                 self.horizontalSlider.setSliderPosition(0)  # 滑动条归零
+                self.pkl = False
                 self.cap = cv2.VideoCapture(self.video) 
                 cap = self.cap
                 self.fpsMax = cap.get(7) - 1

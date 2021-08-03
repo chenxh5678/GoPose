@@ -1,19 +1,20 @@
 # GoPose人工智能运动分析系统
-GoPose人工智能运动分析系统,可完成人体姿态25个关键点自动识别、编辑、导出结果等工作  
+GoPose人工智能运动分析系统  
+可完成人体姿态25个关键点自动识别、编辑、导出结果等工作  
 ![image](https://github.com/chenxh5678/GoPose/blob/main/README/Image/1.gif)
 ## 项目背景
 - 那年做毕业论文，用北体的视讯软件，半年时间逐帧逐点手动标记运动员的关键点，最终顺利完成论文，非常感谢视讯  
-- 但手动标点使人非常疲惫，并且会耗费大量时间，不利于运动训练中给运动员即时反馈，它局限在了科学研究。“如果有自动识别关键点的功能该多好”的想法那时诞生  
+- 但手动标点使人非常疲惫，并且会耗费大量时间，不利于运动训练中给运动员即时反馈。“如果有自动识别关键点的功能该多好”的想法那时诞生  
 - 最近闲，实现一下当年的想法  
 ## 安装配置
 ### 1 环境
 推荐Window10、python3.7、CUDA11.2
 ### 2 下载GoPose项目
-- Windows：可以Download ZIP或使用GitHub桌面或从Powershell克隆  
+- Windows：Download ZIP或使用GitHub桌面或从Powershell克隆  
 - cmd控制台，按需求文档`GoPose/requirements.txt`安装库
-### 3 配置OpenPose
-- 下载安装好OpenPose（[官方文档](https://github.com/CMU-Perceptual-Computing-Lab/openpose)、[bilibili](https://www.bilibili.com/video/BV1WV411v7aj)）  
-- 进入openpose中自己`build`的文件夹，将`openpose/build/`内的bin文件夹复制到`GoPose/resource/`中，替换同名文件  
+### 3 配置姿态估计模块
+- 下载安装OpenPose（[官方文档](https://github.com/CMU-Perceptual-Computing-Lab/openpose)、[bilibili](https://www.bilibili.com/video/BV1WV411v7aj)）  
+- 进入自己建的`build`文件夹，将`openpose/build/`内的bin文件夹复制到`GoPose/resource/`中，替换同名文件  
 - 将openpose文件夹中，`models`文件夹复制到`GoPose/resource/`中，替换同名文件,目前只用到`pose/body25/pose_iter_584000.caffemodel`  
 - `openpose/build/python/openpose/Release/`内3个文件复制到`GoPose/resource/`内替换  
 - `openpose/build/x64/Release/`内的openpose.dll复制到`GoPose/resource/`内替换  
@@ -28,15 +29,15 @@ GoPose人工智能运动分析系统,可完成人体姿态25个关键点自动�
 <center>resource文件夹图示</center> 
 
 ## 使用方法
-执行GoPose.py文件  
+运行GoPose.py文件  
 [示例]()
-## 姿态识别结果
-### Pose Estimation  
+## 姿态估计结果  
 Results on COCO test-dev 2015:  
 
 | Method | AP @0.5:0.95 | AP @0.5 | AP @0.75 | AP medium | AP large  
 | :----: | :----: | :----: | :----: | :----: | :----: 
 | OpenPose (CMU-Pose)	| 61.8 | 84.9 | 67.5 | 57.1 | 68.2  
+
 
 Results on MPII full test set:  
 | Method	|Head	|Shoulder	|Elbow	|Wrist	|Hip	|Knee	|Ankle	|Ave
@@ -53,8 +54,8 @@ Results on MPII full test set:
 - [ ] 更多的人体惯性参数模型
 - [ ] '测试对象'信息栏的应用
 - [ ] 根据硬件情况，可选增加手部和面部关键点识别，全部135个关键点
-- [ ] 更精确、速度更快的自动识别
+- [ ] 更精确、速度更快的姿态估计
 ## 相关项目
-- 自动姿态识别功能来源： [OpenPose](https://github.com/CMU-Perceptual-Computing-Lab/openpose)
+- 姿态估计功能来源： [OpenPose](https://github.com/CMU-Perceptual-Computing-Lab/openpose)
 ## 许可证
 GoPose可免费用于非商业用途，并可在这些条件下重新分配。请在[许可证](https://github.com/chenxh5678/GoPose/blob/main/LICENSE)查看更多细节

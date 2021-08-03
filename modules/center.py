@@ -12,9 +12,11 @@ def core(data):  # 输入一帧25点数据
     
     rightupperarmx=data[2][0]-(data[2][0]-data[3][0])*0.46
     rightforearmx=data[3][0]-(data[3][0]-data[4][0])*0.41
+    righthandx = data[4][0]
     
     leftupperarmx=data[5][0]-(data[5][0]-data[6][0])*0.46
     leftforearmx=data[6][0]-(data[6][0]-data[7][0])*0.41
+    lefthandx = data[7][0]
 
     leftthighx=data[12][0]-(data[12][0]-data[13][0])*0.42
     leftcalfx=data[13][0]-(data[13][0]-data[14][0])*0.41  
@@ -30,9 +32,11 @@ def core(data):  # 输入一帧25点数据
 
     rightupperarmy=data[2][1]-(data[2][1]-data[3][1])*0.46
     rightforearmy=data[3][1]-(data[3][1]-data[4][1])*0.41
+    righthandy = data[4][1]
     
     leftupperarmy=data[5][1]-(data[5][1]-data[6][1])*0.46
     leftforearmy=data[6][1]-(data[6][1]-data[7][1])*0.41
+    lefthandy = data[7][1]
 
     leftthighy=data[12][1]-(data[12][1]-data[13][1])*0.42
     leftcalfy=data[13][1]-(data[13][1]-data[14][1])*0.41
@@ -42,8 +46,8 @@ def core(data):  # 输入一帧25点数据
     rightcalfy=data[10][1]-(data[10][1]-data[11][1])*0.41
     rightfooty=data[24][1]-(data[24][1]-data[22][1])*0.5
     
-    centerofgravityx=0.044*headx+0.033*neckx+0.479*bodyx+0.0265*(rightupperarmx+leftupperarmx)+0.015*(rightforearmx+leftforearmx)+0.1*(rightthighx+leftthighx)+0.0535*(rightcalfx+leftcalfx)+0.019*(rightfootx+leftfootx)
-    centerofgravityy=0.044*heady+0.033*necky+0.479*bodyy+0.0265*(rightupperarmy+leftupperarmy)+0.015*(rightforearmy+leftforearmy)+0.1*(rightthighy+leftthighy)+0.0535*(rightcalfy+leftcalfy)+0.019*(rightfooty+leftfooty)
+    centerofgravityx=0.044*headx+0.033*neckx+0.479*bodyx+0.0265*(rightupperarmx+leftupperarmx)+0.015*(rightforearmx+leftforearmx)+0.009*(righthandx+lefthandx)+0.1*(rightthighx+leftthighx)+0.0535*(rightcalfx+leftcalfx)+0.019*(rightfootx+leftfootx)
+    centerofgravityy=0.044*heady+0.033*necky+0.479*bodyy+0.0265*(rightupperarmy+leftupperarmy)+0.015*(rightforearmy+leftforearmy)+0.009*(righthandy+lefthandy)+0.1*(rightthighy+leftthighy)+0.0535*(rightcalfy+leftcalfy)+0.019*(rightfooty+leftfooty)
     
     # 重心
     x = int(centerofgravityx)
