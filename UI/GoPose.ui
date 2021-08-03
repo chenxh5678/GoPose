@@ -888,7 +888,7 @@ QPushButton:hover{background-color:rgb(255, 255, 255);border-radius: 10px;paddin
          <item>
           <widget class="QPushButton" name="pushButton_10">
            <property name="enabled">
-            <bool>true</bool>
+            <bool>false</bool>
            </property>
            <property name="maximumSize">
             <size>
@@ -1080,6 +1080,7 @@ QPushButton:hover{background-color:rgb(255, 255, 255);border-radius: 10px;paddin
      <string>帮助（&amp;H)</string>
     </property>
     <addaction name="actionHelp"/>
+    <addaction name="actionAward"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menu_V"/>
@@ -1124,6 +1125,9 @@ QPushButton:hover{background-color:rgb(255, 255, 255);border-radius: 10px;paddin
    <addaction name="actionOutPara"/>
    <addaction name="actionOutVideo"/>
    <addaction name="actionVideoNone"/>
+   <addaction name="separator"/>
+   <addaction name="separator"/>
+   <addaction name="actionAward"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QDockWidget" name="dockWidget">
@@ -1634,6 +1638,15 @@ QPushButton:hover{background-color:rgb(255, 255, 255);border-radius: 10px;paddin
   <action name="actionHelp">
    <property name="text">
     <string>Help</string>
+   </property>
+  </action>
+  <action name="actionAward">
+   <property name="icon">
+    <iconset>
+     <normaloff>../Icon/点赞.png</normaloff>../Icon/点赞.png</iconset>
+   </property>
+   <property name="text">
+    <string>赞赏</string>
    </property>
   </action>
  </widget>

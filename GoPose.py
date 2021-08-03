@@ -26,6 +26,7 @@ from PyQt5.QtGui import QImage,QPixmap,QPalette,QIcon,QFont
 from modules.mylabel import MyLabel
 from modules.Analysis import analysis
 from modules import calculation
+from UI.award import Award
 import numpy as np
 from UI.Dialog import Dialog
 
@@ -97,6 +98,7 @@ class GoPose(Ui_MainWindow,QMainWindow):
         self.actionFont.triggered.connect(self.fontSize)
         self.actionlineSize.triggered.connect(self.lineSize)
         self.actionHelp.triggered.connect(self.help)
+        self.actionAward.triggered.connect(self.award)
 
     def button(self):
         self.pushButton.clicked.connect(self.last)
@@ -819,13 +821,13 @@ class GoPose(Ui_MainWindow,QMainWindow):
         if self.play2:
             self.play2 = False
             icon7 = QIcon()
-            icon7.addPixmap(QPixmap("d:\\Code\\github\\GoPose\\UI\\../Icon/播放(1).png"), QIcon.Normal, QIcon.Off)
+            icon7.addPixmap(QPixmap("Icon/播放(1).png"), QIcon.Normal, QIcon.Off)
             self.pushButton_10.setIcon(icon7)
             self.pushButton_10.setIconSize(QSize(48, 48))
         else:
             self.play2 = True 
             icon72 = QIcon()
-            icon72.addPixmap(QPixmap("d:\\Code\\github\\GoPose\\UI\\../Icon/暂停.png"), QIcon.Normal, QIcon.Off)
+            icon72.addPixmap(QPixmap("Icon/暂停.png"), QIcon.Normal, QIcon.Off)
             self.pushButton_10.setIcon(icon72)
             self.pushButton_10.setIconSize(QSize(48, 48))
         cap = self.cap
@@ -845,7 +847,7 @@ class GoPose(Ui_MainWindow,QMainWindow):
                 self.horizontalSlider.setSliderPosition(0)
                 self.play2 = False
                 icon7 = QIcon()
-                icon7.addPixmap(QPixmap("d:\\Code\\github\\GoPose\\UI\\../Icon/播放(1).png"), QIcon.Normal, QIcon.Off)
+                icon7.addPixmap(QPixmap("Icon/播放(1).png"), QIcon.Normal, QIcon.Off)
                 self.pushButton_10.setIcon(icon7)
                 self.pushButton_10.setIconSize(QSize(48, 48))
                 break
@@ -969,6 +971,11 @@ class GoPose(Ui_MainWindow,QMainWindow):
 
     def help(self):
         QMessageBox.information(self,'帮助','GoPose操作演示：https://www.bilibili.com/video/BV1QP4y1s76N/\n联系作者：786028450@qq.com')
+
+    def award(self):
+        self.tool = Award()
+        self.tool.show()
+
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     win = GoPose()
