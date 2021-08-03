@@ -1,5 +1,5 @@
-# GoPose人工智能运动分析系统
-GoPose人工智能运动分析系统  
+# GoPose人工智能运动分析软件
+GoPose人工智能运动分析软件  
 可完成人体姿态25个关键点自动识别、编辑、导出结果等工作  
 ![image](https://github.com/chenxh5678/GoPose/blob/main/README/Image/1.gif)
 ## 项目背景
