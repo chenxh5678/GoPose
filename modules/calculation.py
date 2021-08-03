@@ -17,10 +17,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 Email: 786028450@qq.com
 '''
 import cv2
-import numpy as np
 import math
 from modules.center import core
-import random
 
 # 3点求角度
 def degree(A,B,C):  # A上端点，B中间点夹角点，C下端点
