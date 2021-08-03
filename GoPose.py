@@ -1,5 +1,22 @@
-#  Author: Xihang Chen
-#  Email: 786028450@qq.com
+'''
+GoPose:Artificial intelligence motion analysis software
+Copyright (C) <2021>  <Xihang Chen>
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published
+by the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+Email: 786028450@qq.com
+'''
+
 import sys,cv2,pickle,os,csv,math
 from UI.Ui_GoPose import Ui_MainWindow
 from PyQt5.QtWidgets import (QApplication,QMainWindow,QTableWidgetItem,QLineEdit,

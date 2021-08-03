@@ -20,17 +20,19 @@ GoPose人工智能运动分析系统
 - `openpose/build/x64/Release/`内的openpose.dll复制到`GoPose/resource/`内替换  
 
 ![image](https://github.com/chenxh5678/GoPose/blob/main/README/Image/bin.png)  
-<center>bin文件夹图示</center>  
+<center>bin文件夹图示</center>   
+
 
 ![image](https://github.com/chenxh5678/GoPose/blob/main/README/Image/models.png)  
-<center>models文件夹图示</center>  
+<center>models文件夹图示</center>   
+
 
 ![image](https://github.com/chenxh5678/GoPose/blob/main/README/Image/resource.png)  
-<center>resource文件夹图示</center> 
+<center>resource文件夹图示</center>   
 
 ## 使用方法
 运行GoPose.py文件  
-[示例]()
+[演示]()
 ## 姿态估计结果  
 Results on COCO test-dev 2015:  
 
@@ -57,5 +59,5 @@ Results on MPII full test set:
 - [ ] 更精确、速度更快的姿态估计
 ## 相关项目
 - 姿态估计功能来源： [OpenPose](https://github.com/CMU-Perceptual-Computing-Lab/openpose)
-## 许可证
-GoPose可免费用于非商业用途，并可在这些条件下重新分配。请在[许可证](https://github.com/chenxh5678/GoPose/blob/main/LICENSE)查看更多细节
+## 版权许可协议
+免费使用，但必须遵守[版权许可协议](https://github.com/chenxh5678/GoPose/blob/main/LICENSE)
