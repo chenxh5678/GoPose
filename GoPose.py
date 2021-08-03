@@ -96,6 +96,7 @@ class GoPose(Ui_MainWindow,QMainWindow):
         self.actionOutPara.triggered.connect(self.exportResults)
         self.actionFont.triggered.connect(self.fontSize)
         self.actionlineSize.triggered.connect(self.lineSize)
+        self.actionHelp.triggered.connect(self.help)
 
     def button(self):
         self.pushButton.clicked.connect(self.last)
@@ -966,6 +967,8 @@ class GoPose(Ui_MainWindow,QMainWindow):
         if ok and size:
             self.lSize = size
 
+    def help(self):
+        QMessageBox.information(self,'帮助','GoPose操作演示：https://www.bilibili.com/video/BV1QP4y1s76N/\n联系作者：786028450@qq.com')
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     win = GoPose()
