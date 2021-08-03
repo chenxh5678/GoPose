@@ -61,5 +61,5 @@ Results on MPII full test set:
 - 姿态估计功能来源： [OpenPose](https://github.com/CMU-Perceptual-Computing-Lab/openpose)
 ## 版权许可协议
 免费使用，但必须遵守[版权许可协议](https://github.com/chenxh5678/GoPose/blob/main/LICENSE)
-## ^-^
+## 赞赏
 如果对您有帮助，可以[请开发者喝一杯](https://github.com/chenxh5678/GoPose/blob/main/README/Image/%E8%AF%B7%E4%BD%9C%E8%80%85%E5%96%9D%E4%B8%80%E6%9D%AF.png)吗^_^
