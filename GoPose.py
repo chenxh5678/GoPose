@@ -201,11 +201,11 @@ class GoPose(Ui_MainWindow,QMainWindow):
     def text(self,i=0):
         if i:
             video_name = self.video.split('/')[-1]
-            text = 'Video:{}        Size:{}        FPS:{}       显示解析人数：{}      画面旋转角：{}°'.format(video_name,self.shape, self.fpsRate,self.member_, self.rotationAngle)
+            text = 'Video:{}        Size:{}        FPS:{}       显示解析人数：{}      画面旋转角：{}°       正方向：↓→'.format(video_name,self.shape, self.fpsRate,self.member_, self.rotationAngle)
             self.label_2.setText(text)
         else:
             video_name = self.video.split('/')[-1]
-            text = 'Video:{}        Size:{}        FPS:{}       画面旋转角：{}°'.format(video_name,self.shape, self.fpsRate, self.rotationAngle)
+            text = 'Video:{}        Size:{}        FPS:{}       画面旋转角：{}°     正方向：↓→'.format(video_name,self.shape, self.fpsRate, self.rotationAngle)
             self.label_2.setText(text)
 
     '''-----管理器属性-----'''
@@ -273,9 +273,9 @@ class GoPose(Ui_MainWindow,QMainWindow):
                 self.tableWidget.setRowCount(0)
                 self.tableWidget.setHorizontalHeaderLabels(['名称','编号'])
                 if self.pkl:
-                    point = ['0 鼻子', '1 脖子', '2 右肩', '3 右肘','4 右腕','5 左肩','6 左肘','7 左腕','8 中臀','9 右臀',
-                            '10 右膝','11 右踝','12 左臀','13 左膝','14 左踝','15 右眼','16 左眼','17 右耳','18 左耳',
-                            '19 左大拇指','20 左小拇指','21 左足跟','22 右大拇指','23 右小拇指','24 右足跟']
+                    point = ['0 鼻子', '1 脖子', '2 右肩', '3 右肘','4 右腕','5 左肩','6 左肘','7 左腕','8 中臀','9 右髋',
+                            '10 右膝','11 右踝','12 左髋','13 左膝','14 左踝','15 右眼','16 左眼','17 右耳','18 左耳',
+                            '19 左足大拇指','20 左足小拇指','21 左足跟','22 右足大拇指','23 右足小拇指','24 右足跟']
                     r = 0
                     for p in point:
                         row = p.split()

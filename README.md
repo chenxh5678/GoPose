@@ -8,7 +8,8 @@ GoPose人工智能运动分析软件
 - 最近闲，实现一下当年的想法  
 ## 安装配置
 ### 1 环境
-推荐Window10、python3.7、CUDA11.2
+python3.7(其他版本会报错2021年8月)  
+推荐Window10、CUDA11.2
 ### 2 下载GoPose项目
 - Windows：Download ZIP或使用GitHub桌面或从Powershell克隆  
 - cmd控制台，按需求文档`GoPose/requirements.txt`安装库

@@ -85,15 +85,18 @@ def para(frame_now,frame_last,fps_video,pc,r):  # 当前帧，上一帧，帧率
         if pc != None:
             rCoreFoot = round(abs(core1[0] - ind[22][0])/pc, 2)
             lCoreFoot = round(abs(core1[0] - ind[19][0])/pc, 2)
+            
         else:
             rCoreFoot = '比例尺缺失'
             lCoreFoot = '比例尺缺失'
         speed_x = None
         speed_y = None
-        # r_hip_w = None
-        # l_hip_w = None
-        # r_knee_w = None
-        # l_knee_w = None
+        r_hip_w = None
+        l_hip_w = None
+        r_knee_w = None
+        l_knee_w = None
+        rToeHSpeed = None  # 右足尖速度
+        lToeHSpeed = None
         # ax = None
         # ay = None
         # Fx = None
@@ -103,28 +106,35 @@ def para(frame_now,frame_last,fps_video,pc,r):  # 当前帧，上一帧，帧率
             ind_l = frame_last  # 前一帧关键点坐标
             core0 = core(ind_l) 
             # 角速度
-            # r_hip0 = round(angle(ind_l[8],ind_l[1],ind_l[9],ind_l[10]),2)
-            # l_hip0 = round(angle(ind_l[9],ind_l[1],ind_l[12],ind_l[13]),2)
-            # r_knee0 = round(degree(ind_l[9],ind_l[10],ind_l[11]),2)
-            # l_knee0 = round(degree(ind_l[12],ind_l[13],ind_l[14]),2)
+            r_hip0 = round(angle(ind_l[8],ind_l[1],ind_l[9],ind_l[10]),2)
+            l_hip0 = round(angle(ind_l[9],ind_l[1],ind_l[12],ind_l[13]),2)
+            r_knee0 = round(degree(ind_l[9],ind_l[10],ind_l[11]),2)
+            l_knee0 = round(degree(ind_l[12],ind_l[13],ind_l[14]),2)
             # r_elbow0 = round(degree(ind_l[2],ind_l[3],ind_l[4]),2)
             # l_elbow0 = round(degree(ind_l[5],ind_l[6],ind_l[7]),2)
-            # r_hip_w = round((r_hip - r_hip0) * fps_video, 2) # 角速度
-            # l_hip_w = round((l_hip - l_hip0) * fps_video, 2)
-            # r_knee_w = round((r_knee - r_knee0) * fps_video, 2)
-            # l_knee_w = round((l_knee - l_knee0) * fps_video, 2)
+            r_hip_w = round((r_hip - r_hip0) * fps_video, 2) # 角速度
+            l_hip_w = round((l_hip - l_hip0) * fps_video, 2)
+            r_knee_w = round((r_knee - r_knee0) * fps_video, 2)
+            l_knee_w = round((l_knee - l_knee0) * fps_video, 2)
             if pc != None:
-                speed_x = round(abs(core1[0] - core0[0]) * fps_video / pc, 2)  # 瞬时水平速度
-                speed_y = round(abs(core1[1] - core0[1]) * fps_video / pc, 2)  # 瞬时水平速度
+                speed_x = round((core1[0] - core0[0]) * fps_video / pc, 2)  # 瞬时水平速度
+                speed_y = round((core1[1] - core0[1]) * fps_video / pc, 2)  # 瞬时水平速度
+                rToeHSpeed = round((ind[22][0] - ind_l[22][0]) * fps_video / pc, 2)
+                lToeHSpeed = round((ind[19][0] - ind_l[19][0]) * fps_video / pc, 2)
             else:
                 speed_x = '比例尺缺失'
                 speed_y = '比例尺缺失'
+                rToeHSpeed = '比例尺缺失'
+                lToeHSpeed = '比例尺缺失'
         result = {'质心坐标':core1,
-                '右髋角(°)':r_hip, '左髋角(°)':l_hip, '右膝角(°)':r_knee, '左膝角(°)':l_knee, '右踝角(°)':rAnkle, '左踝角(°)':lAnkle, 
-                '躯干-垂线角(°)':bodyV, '右大腿-水平角(°)':rThighH, '左大腿-水平角(°)':lThighH, '右小腿-水平角(°)':rShankH, '左小腿-水平角(°)':lShankH, 
-                '质心右足水平距离(m)':rCoreFoot, '质心左足水平距离(m)':lCoreFoot, '水平速度(m/s)':speed_x, '垂直速度(m/s)':speed_y
+                '右髋角(°)':r_hip, '右膝角(°)':r_knee, '右踝角(°)':rAnkle, '左髋角(°)':l_hip, '左膝角(°)':l_knee, '左踝角(°)':lAnkle, 
+                '躯干-垂线角(°)':bodyV, '右大腿-水平角(°)':rThighH, '右小腿-水平角(°)':rShankH, '左大腿-水平角(°)':lThighH, '左小腿-水平角(°)':lShankH, 
+                '质心-右足水平距离(m)':rCoreFoot, '质心-左足水平距离(m)':lCoreFoot, 
+                '质心水平速度(m/s)':speed_x, '质心垂直速度(m/s)':speed_y,
+                '右髋角速度(°/s)':r_hip_w, '左髋角速度(°/s)':l_hip_w, '右膝角速度(°/s)':r_knee_w, '左膝角速度(°/s)':l_knee_w,
+                '右足尖水平速度(m/s)':rToeHSpeed, '左足尖水平速度(m/s)':lToeHSpeed
                 }   #  '水平加速度(m/s2)':ax, '垂直加速度(m/s2)':ay, '地面水平力(N)':Fx, '地面垂直力(N)':Fy, 'x功率(W)':Px
-                # '右髋角速度(°/s)':r_hip_w, '左髋角速度(°/s)':l_hip_w, '右膝角速度(°/s)':r_knee_w, '左膝角速度(°/s)':l_knee_w, '右肘角(°)':r_elbow, '左肘角(°)':l_elbow,  
+                #  '右肘角(°)':r_elbow, '左肘角(°)':l_elbow,  
         return result
 
 # 显示棍图
