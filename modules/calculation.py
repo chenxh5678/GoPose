@@ -80,8 +80,8 @@ def para(frame_now,frame_last,fps_video,pc,r):  # 当前帧，上一帧，帧率
         lThighH = level(ind[12],ind[13],r)
         rShankH = level(ind[10],ind[11],r)
         lShankH = level(ind[13],ind[14],r)
-        # 重心距离
-        core1 = core(ind)  # 当前帧重心坐标
+        # 质心距离
+        core1 = core(ind)  # 当前帧质心坐标
         if pc != None:
             rCoreFoot = round(abs(core1[0] - ind[22][0])/pc, 2)
             lCoreFoot = round(abs(core1[0] - ind[19][0])/pc, 2)
@@ -119,10 +119,10 @@ def para(frame_now,frame_last,fps_video,pc,r):  # 当前帧，上一帧，帧率
             else:
                 speed_x = '比例尺缺失'
                 speed_y = '比例尺缺失'
-        result = {'重心坐标':core1,
+        result = {'质心坐标':core1,
                 '右髋角(°)':r_hip, '左髋角(°)':l_hip, '右膝角(°)':r_knee, '左膝角(°)':l_knee, '右踝角(°)':rAnkle, '左踝角(°)':lAnkle, 
                 '躯干-垂线角(°)':bodyV, '右大腿-水平角(°)':rThighH, '左大腿-水平角(°)':lThighH, '右小腿-水平角(°)':rShankH, '左小腿-水平角(°)':lShankH, 
-                '重心右足水平距离':rCoreFoot, '重心左足水平距离':lCoreFoot, '水平速度(m/s)':speed_x, '垂直速度(m/s)':speed_y
+                '质心右足水平距离(m)':rCoreFoot, '质心左足水平距离(m)':lCoreFoot, '水平速度(m/s)':speed_x, '垂直速度(m/s)':speed_y
                 }   #  '水平加速度(m/s2)':ax, '垂直加速度(m/s2)':ay, '地面水平力(N)':Fx, '地面垂直力(N)':Fy, 'x功率(W)':Px
                 # '右髋角速度(°/s)':r_hip_w, '左髋角速度(°/s)':l_hip_w, '右膝角速度(°/s)':r_knee_w, '左膝角速度(°/s)':l_knee_w, '右肘角(°)':r_elbow, '左肘角(°)':l_elbow,  
         return result
@@ -173,7 +173,7 @@ def draw(frame, now, lineSize, type = 0):
                 # line(frame,p(16),p(18),(0,102,0))  # 不重要         
         elif type == 1:  # 选择画点 
             core1 = core(now)
-            cv2.circle(frame,core1,4,(20,200,0),2)  # 重心
+            cv2.circle(frame,core1,4,(20,200,0),2)  # 质心
             for o in range(24):
                 cv2.circle(frame,p(o),2,(0,255,0),2)
     except:

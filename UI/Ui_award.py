@@ -1,21 +1,3 @@
-'''
-GoPose:Artificial intelligence motion analysis software
-Copyright (C) <2021>  <Xihang Chen>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as published
-by the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
-
-You should have received a copy of the GNU Affero General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-Email: 786028450@qq.com
-'''
 # -*- coding: utf-8 -*-
 
 # Form implementation generated from reading ui file 'd:\Code\Python Project\GoPose\UI\award.ui'
@@ -46,10 +28,10 @@ class Ui_Form(object):
         self.label_2.setObjectName("label_2")
         self.verticalLayout.addWidget(self.label_2)
         self.label_3 = QtWidgets.QLabel(Form)
-        self.label_3.setMinimumSize(QtCore.QSize(720, 384))
-        self.label_3.setMaximumSize(QtCore.QSize(720, 384))
+        self.label_3.setMinimumSize(QtCore.QSize(720, 361))
+        self.label_3.setMaximumSize(QtCore.QSize(720, 361))
         self.label_3.setText("")
-        self.label_3.setPixmap(QtGui.QPixmap("README/Image/请作者喝一杯.png"))
+        self.label_3.setPixmap(QtGui.QPixmap("README/Image/请开发者喝一杯.jpg"))
         self.label_3.setScaledContents(True)
         self.label_3.setObjectName("label_3")
         self.verticalLayout.addWidget(self.label_3)

@@ -13,7 +13,7 @@ GoPose人工智能运动分析软件
 - Windows：Download ZIP或使用GitHub桌面或从Powershell克隆  
 - cmd控制台，按需求文档`GoPose/requirements.txt`安装库
 ### 3 配置姿态估计模块
-- 下载安装OpenPose（[官方文档](https://github.com/CMU-Perceptual-Computing-Lab/openpose)、[bilibili](https://www.bilibili.com/video/BV1WV411v7aj)）  
+- 下载安装OpenPose（[官方文档](https://github.com/CMU-Perceptual-Computing-Lab/openpose)、[bilibili](https://www.bilibili.com/video/BV1WV411v7aj)、[bilibili快速安装](https://www.bilibili.com/video/BV1uK411w74E)）  
 - 进入自己建的`build`文件夹，将`openpose/build/`内的bin文件夹复制到`GoPose/resource/`中，替换同名文件  
 - 将openpose文件夹中，`models`文件夹复制到`GoPose/resource/`中，替换同名文件,目前只用到`pose/body25/pose_iter_584000.caffemodel`  
 - `openpose/build/python/openpose/Release/`内3个文件复制到`GoPose/resource/`内替换  
@@ -36,15 +36,15 @@ GoPose人工智能运动分析软件
 ## 姿态估计结果  
 Results on COCO test-dev 2015:  
 
-| Method | AP @0.5:0.95 | AP @0.5 | AP @0.75 | AP medium | AP large  
-| :----: | :----: | :----: | :----: | :----: | :----: 
-| OpenPose (CMU-Pose)	| 61.8 | 84.9 | 67.5 | 57.1 | 68.2  
+| AP @0.5:0.95 | AP @0.5 | AP @0.75 | AP medium | AP large  
+| :----: | :----: | :----: | :----: | :----: 
+| 61.8 | 84.9 | 67.5 | 57.1 | 68.2  
 
 
 Results on MPII full test set:  
-| Method	|Head	|Shoulder	|Elbow	|Wrist	|Hip	|Knee	|Ankle	|Ave
-|:----: | :----: | :----: | :----: | :----: | :----: | :----: | :----: | :----:  
-|OpenPose (CMU-Pose)	|91.2	|87.6	|77.7	|66.8	|75.4	|68.9	|61.7	|75.6  
+|Head	|Shoulder	|Elbow	|Wrist	|Hip	|Knee	|Ankle	|Ave
+| :----: | :----: | :----: | :----: | :----: | :----: | :----: | :----:  
+|91.2	|87.6	|77.7	|66.8	|75.4	|68.9	|61.7	|75.6  
 
 ## 未来要做的
 - [ ] 滤波平滑功能
@@ -58,7 +58,7 @@ Results on MPII full test set:
 - [ ] 根据硬件情况，可选增加手部和面部关键点识别，全部135个关键点
 - [ ] 更精确、速度更快的姿态估计
 ## 相关项目
-- 姿态估计功能来源： [OpenPose](https://github.com/CMU-Perceptual-Computing-Lab/openpose)
+- 姿态估计来源： [OpenPose](https://github.com/CMU-Perceptual-Computing-Lab/openpose)
 ## 版权许可协议
 免费使用，但必须遵守[版权许可协议](https://github.com/chenxh5678/GoPose/blob/main/LICENSE)
 ## 赞赏

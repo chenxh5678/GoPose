@@ -54,20 +54,20 @@
      <property name="minimumSize">
       <size>
        <width>720</width>
-       <height>384</height>
+       <height>361</height>
       </size>
      </property>
      <property name="maximumSize">
       <size>
        <width>720</width>
-       <height>384</height>
+       <height>361</height>
       </size>
      </property>
      <property name="text">
       <string/>
      </property>
      <property name="pixmap">
-      <pixmap>../../../github/GoPose/README/Image/请作者喝一杯.png</pixmap>
+      <pixmap>../../../github/GoPose/README/Image/请开发者喝一杯.jpg</pixmap>
      </property>
      <property name="scaledContents">
       <bool>true</bool>
