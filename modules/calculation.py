@@ -129,9 +129,9 @@ def para(frame_now,frame_last,fps_video,pc,r):  # 当前帧，上一帧，帧率
         result = {'质心坐标':core1,
                 '右髋角(°)':r_hip, '右膝角(°)':r_knee, '右踝角(°)':rAnkle, '左髋角(°)':l_hip, '左膝角(°)':l_knee, '左踝角(°)':lAnkle, 
                 '躯干-垂线角(°)':bodyV, '右大腿-水平角(°)':rThighH, '右小腿-水平角(°)':rShankH, '左大腿-水平角(°)':lThighH, '左小腿-水平角(°)':lShankH, 
+                '右髋角速度(°/s)':r_hip_w, '左髋角速度(°/s)':l_hip_w, '右膝角速度(°/s)':r_knee_w, '左膝角速度(°/s)':l_knee_w,
                 '质心-右足水平距离(m)':rCoreFoot, '质心-左足水平距离(m)':lCoreFoot, 
                 '质心水平速度(m/s)':speed_x, '质心垂直速度(m/s)':speed_y,
-                '右髋角速度(°/s)':r_hip_w, '左髋角速度(°/s)':l_hip_w, '右膝角速度(°/s)':r_knee_w, '左膝角速度(°/s)':l_knee_w,
                 '右足尖水平速度(m/s)':rToeHSpeed, '左足尖水平速度(m/s)':lToeHSpeed
                 }   #  '水平加速度(m/s2)':ax, '垂直加速度(m/s2)':ay, '地面水平力(N)':Fx, '地面垂直力(N)':Fy, 'x功率(W)':Px
                 #  '右肘角(°)':r_elbow, '左肘角(°)':l_elbow,  

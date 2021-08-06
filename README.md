@@ -1,6 +1,6 @@
-# GoPose人工智能运动分析软件
-GoPose人工智能运动分析软件  
-可完成人体姿态25个关键点自动识别、编辑、导出结果等工作  
+# GoPose人工智能运动分析软件  
+- GoPose可以自动进行人体姿态25个关键点识别，方便进行运动技术分析，提供关节角度、位移速度等常用运动学结果，帮助运动员、教练员及体育科研工作者快速得到基础分析结果。
+- GoPose可用于比赛、训练、科研等场景，其优势是无接触式测量和快速反馈。   
 ![image](https://github.com/chenxh5678/GoPose/blob/main/README/Image/1.gif)
 ## 项目背景
 - 那年做毕业论文，用北体的视迅软件，半年时间逐帧逐点手动标记运动员的关键点，最终顺利完成论文，非常感谢视迅  
@@ -8,10 +8,10 @@ GoPose人工智能运动分析软件
 - 最近闲，实现一下当年的想法  
 ## 安装配置
 ### 1 环境
-python3.7(其他版本会报错2021年8月)  
-推荐Window10、CUDA11.2
-### 2 下载GoPose项目
-- Windows：Download ZIP或使用GitHub桌面或从Powershell克隆  
+- python3.7(其他版本会报错 2021年8月)  
+- 推荐Window10、CUDA11.2
+### 2 下载GoPose
+- Windows：Download ZIP或使用GitHub桌面等 
 - cmd控制台，按需求文档`GoPose/requirements.txt`安装库
 ### 3 配置姿态估计模块
 - 下载安装OpenPose（[官方文档](https://github.com/CMU-Perceptual-Computing-Lab/openpose)、[bilibili](https://www.bilibili.com/video/BV1WV411v7aj)、[bilibili快速安装](https://www.bilibili.com/video/BV1uK411w74E)）  
@@ -59,8 +59,8 @@ Results on MPII full test set:
 - [ ] 根据硬件情况，可选增加手部和面部关键点识别，全部135个关键点
 - [ ] 更精确、速度更快的姿态估计
 ## 相关项目
-- 姿态估计来源： [OpenPose](https://github.com/CMU-Perceptual-Computing-Lab/openpose)
+- [OpenPose](https://github.com/CMU-Perceptual-Computing-Lab/openpose)
 ## 版权许可协议
-免费使用，但必须遵守[版权许可协议](https://github.com/chenxh5678/GoPose/blob/main/LICENSE)
+免费使用，但须遵守[版权许可协议](https://github.com/chenxh5678/GoPose/blob/main/LICENSE)
 ## 赞赏
 如果对您有帮助，可以[请开发者喝一杯](https://github.com/chenxh5678/GoPose/blob/main/README/Image/%E8%AF%B7%E5%BC%80%E5%8F%91%E8%80%85%E5%96%9D%E4%B8%80%E6%9D%AF.jpg)吗^_^
