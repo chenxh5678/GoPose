@@ -146,7 +146,9 @@ def draw(frame, now, lineSize, type = 0):
                 cv2.line(frame,p0,p1,color, lineSize)
                 cv2.circle(frame, p1, circleSize, color, -1)
         def p(num):  # 取25坐标点
-            return (now[num][0],now[num][1])  # 把self.now改为now   
+            px = int(now[num][0])
+            py = int(now[num][1])
+            return (px,py)  # 把self.now改为now   
         if type == 0:
                 core1 = core(now)
                 cv2.circle(frame, core1, circleSize + 1, (255,200,0), lineSize)  # 重心
