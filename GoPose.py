@@ -18,9 +18,12 @@ Email: 786028450@qq.com
 '''
 
 import sys,cv2,pickle,os,csv,math
+
+from numpy.core.defchararray import index
 from UI.Ui_GoPose import Ui_MainWindow
 from PyQt5.QtWidgets import (QApplication,QMainWindow,QTableWidgetItem,QLineEdit,
-                            QFileDialog,QMessageBox,QHeaderView,QInputDialog,QAbstractItemView)
+                            QFileDialog,QMessageBox,QHeaderView,QInputDialog,QAbstractItemView,
+                            QUndoCommand, QUndoStack, QUndoView,QMenu)
 from PyQt5.QtCore import Qt,QDir,QSize
 from PyQt5.QtGui import QImage,QPixmap,QPalette,QIcon,QFont
 from modules.mylabel import MyLabel
@@ -29,6 +32,9 @@ from modules import calculation
 from UI.award import Award
 import numpy as np
 from UI.Dialog import Dialog
+from matplotlib.widgets import Button,TextBox
+from modules.myPointMove import Point_Move
+from modules.filter import butter_lowpass_filtfilt
 
 class GoPose(Ui_MainWindow,QMainWindow):
     def __init__(self):
@@ -71,6 +77,8 @@ class GoPose(Ui_MainWindow,QMainWindow):
         self.tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
         self.tableWidget.horizontalHeader().setSectionResizeMode(0, QHeaderView.Interactive)  # 第一列可调整列宽
         self.tableWidget.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+        self.tableWidget.setContextMenuPolicy(Qt.CustomContextMenu)  ######允许右键产生子菜单
+        self.tableWidget.customContextMenuRequested.connect(self.generateMenu)  ####右键菜单
 
     def MenuBar(self):  # 菜单栏、工具栏、状态栏
         self.actionExit.triggered.connect(QApplication.instance().quit)
@@ -99,6 +107,7 @@ class GoPose(Ui_MainWindow,QMainWindow):
         self.actionlineSize.triggered.connect(self.lineSize)
         self.actionHelp.triggered.connect(self.help)
         self.actionAward.triggered.connect(self.award)
+        # self.actionFilter.triggered.connect(self.filt)
 
     def button(self):
         self.pushButton.clicked.connect(self.last)
@@ -286,11 +295,13 @@ class GoPose(Ui_MainWindow,QMainWindow):
                         newItem = QTableWidgetItem(row[0])
                         self.tableWidget.setItem(r,1,newItem)
                         r += 1
+                    self.tableWidget.customContextMenuRequested.connect(self.generateMenu)  ####右键菜单
                 else:
                     count = self.tableWidget.rowCount()
                     self.tableWidget.insertRow(count)  # 新增行
                     newItem = QTableWidgetItem('缺少解析点数据')
                     self.tableWidget.setItem(0,0,newItem)
+                    self.tableWidget.customContextMenuRequested.connect(self.generateMenu)  ####右键菜单
             elif item == '显示运动学结果':
                 try:
                     self.tableWidget.disconnect()
@@ -424,6 +435,7 @@ class GoPose(Ui_MainWindow,QMainWindow):
                     self.actionSave.setEnabled(True)
                     self.actionOutVideo.setEnabled(True)
                     self.actionlineSize.setEnabled(True)
+                    # self.actionFilter.setEnabled(True)
                     self.showResult()
             except Exception as e:
                 QMessageBox.warning(self,'载入解析点错误',str(e))
@@ -460,7 +472,7 @@ class GoPose(Ui_MainWindow,QMainWindow):
         except Exception as e:
             QMessageBox.warning(self,'当前解析点错误',str(e))
     
-    def modifyKey(self):  # 修改解析坐标点
+    def modifyKey(self):  # 修改坐标点
         try:
             item = self.treeWidget.currentItem()
             if item:
@@ -975,6 +987,117 @@ class GoPose(Ui_MainWindow,QMainWindow):
     def award(self):
         self.tool = Award()
         self.tool.show()
+
+    '''----- 折线图修改并滤波-----'''
+    def generateMenu(self, pos):
+        item = self.treeWidget.currentItem()
+        if item:
+            item = item.checkState(0)
+        if item == 2 and self.pkl:
+            row_num = -1
+            for i in self.tableWidget.selectionModel().selection().indexes():
+                row_num = i.row()
+            if row_num < 25:
+                menu = QMenu()
+                item1 = menu.addAction("x值折线图修正与滤波")
+                item2 = menu.addAction("y值折线图修正与滤波")
+                action = menu.exec_(self.tableWidget.mapToGlobal(pos))
+                if action == item1:
+                    x = row_num * 2
+                    self.modifyCut(x)
+                elif action == item2:
+                    y = row_num * 2 + 1
+                    self.modifyCut(y)
+    
+    def modifyCut(self,point):
+        if self.cut1 != None and self.cut2:  # 工作区内修改
+            data = self.data[self.cut1:self.cut2]
+            outData = self.dataModify(data,point)
+            self.data[self.cut1:self.cut2] = outData
+        else:
+            outData = self.dataModify(self.data,point)
+            self.data = outData
+                    
+    
+    def dataModify(self,data,point):
+        dataRow = []  # 25点在一行
+        for d in data:
+            d1 = np.delete(d[0],-1,axis = 1)  # 第0个人的，
+            line = d1.flatten()
+            dataRow.append(line)
+        dataRow = np.array(dataRow)
+        dataT = np.transpose(dataRow)  # 转置 一个点一列
+        select = dataT[point]  # 选择一列数据
+        out,ok = Point_Move.get(self,select)
+        if ok :
+            dataT[point] = np.array(out)  # 覆盖数据
+            # 数据还原成data
+            dataReturn = np.transpose(dataT)
+            dataOut = []
+            for g in dataReturn:
+                twoCol = g.reshape(25,2)
+                c = np.ones(25)
+                result = np.array([np.c_[twoCol,c]])
+                dataOut.append(result)
+            return dataOut
+        else:
+            return data
+    
+    # 全部25点数据滤波
+    # def filt(self):
+    #     def lowpass(data,point):
+    #         try:
+    #             dataRow = []  # 25点在一行
+    #             for d in data:
+    #                 d1 = np.delete(d[0],-1,axis = 1)  # 第0个人的，
+    #                 line = d1.flatten()
+    #                 dataRow.append(line)
+    #             dataRow = np.array(dataRow)
+    #             dataT = np.transpose(dataRow)  # 转置 一个点一列
+    #             select = dataT[point]  # 选择一列数据
+
+    #             cutOff = QInputDialog.getInt(self,'ButterWorth低通滤波器','截断频率(Hz):',10,1,1000)
+    #             fps = QInputDialog.getInt(self,'ButterWorth低通滤波器','拍摄帧率(Fps):',30,1,10000)
+    #             wn = 2*cutOff/fps
+    #             if 0 < wn < 1:
+    #                 pass
+    #             else:
+    #                 cutOff = 0.5 * fps - 1
+    #             # 开始滤波
+    #             out = butter_lowpass_filtfilt(select,cutOff, fps)
+
+    #             dataT[point] = np.array(out)  # 覆盖数据
+    #             # 数据还原成data
+    #             dataReturn = np.transpose(dataT)
+    #             dataOut = []
+    #             for g in dataReturn:
+    #                 twoCol = g.reshape(25,2)
+    #                 c = np.ones(25)
+    #                 result = np.array([np.c_[twoCol,c]])
+    #                 dataOut.append(result)
+    #             return dataOut
+    #         except:
+    #             pass
+
+    #     radio,ok= Dialog.getResult(self)
+    #     if ok:
+    #         if radio:
+    #             if self.cut1 != None and self.cut2:
+    #                 data = self.data[self.cut1:self.cut2]
+    #                 undo = [30,31,32,33,34,35,36,37,40,41,46,47]
+    #                 for point in range(50):
+    #                     if point not in undo:
+    #                         outData = lowpass(data,point)
+    #                         self.data[self.cut1:self.cut2] = outData
+    #         else:
+    #             data = self.data
+    #             undo = [30,31,32,33,34,35,36,37,40,41,46,47]
+    #             for point in range(50):
+    #                 if point not in undo:
+    #                     outData = lowpass(data,point)
+    #                     self.data = outData
+        
+        
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
