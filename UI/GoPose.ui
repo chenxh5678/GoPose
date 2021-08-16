@@ -888,7 +888,7 @@ QPushButton:hover{background-color:rgb(255, 255, 255);border-radius: 10px;paddin
          <item>
           <widget class="QPushButton" name="pushButton_10">
            <property name="enabled">
-            <bool>false</bool>
+            <bool>true</bool>
            </property>
            <property name="maximumSize">
             <size>
@@ -1082,7 +1082,15 @@ QPushButton:hover{background-color:rgb(255, 255, 255);border-radius: 10px;paddin
     <addaction name="actionHelp"/>
     <addaction name="actionAward"/>
    </widget>
+   <widget class="QMenu" name="menu_3">
+    <property name="title">
+     <string>编辑(&amp;E)</string>
+    </property>
+    <addaction name="actionUndo"/>
+    <addaction name="actionRedo"/>
+   </widget>
    <addaction name="menu"/>
+   <addaction name="menu_3"/>
    <addaction name="menu_V"/>
    <addaction name="menu_N"/>
    <addaction name="menu_u"/>
@@ -1261,6 +1269,9 @@ QPushButton:hover{background-color:rgb(255, 255, 255);border-radius: 10px;paddin
         <font>
          <pointsize>16</pointsize>
         </font>
+       </property>
+       <property name="contextMenuPolicy">
+        <enum>Qt::DefaultContextMenu</enum>
        </property>
        <property name="frameShape">
         <enum>QFrame::NoFrame</enum>
@@ -1453,7 +1464,7 @@ QPushButton:hover{background-color:rgb(255, 255, 255);border-radius: 10px;paddin
    </property>
    <property name="icon">
     <iconset>
-     <normaloff>../Icon/还原.png</normaloff>../Icon/还原.png</iconset>
+     <normaloff>../Icon/还原2.png</normaloff>../Icon/还原2.png</iconset>
    </property>
    <property name="text">
     <string>原始尺寸(&amp;R)</string>
@@ -1647,6 +1658,36 @@ QPushButton:hover{background-color:rgb(255, 255, 255);border-radius: 10px;paddin
    </property>
    <property name="text">
     <string>赞赏</string>
+   </property>
+  </action>
+  <action name="actionUndo">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>../Icon/撤销.png</normaloff>../Icon/撤销.png</iconset>
+   </property>
+   <property name="text">
+    <string>撤销</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Z</string>
+   </property>
+  </action>
+  <action name="actionRedo">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>../Icon/还原.png</normaloff>../Icon/还原.png</iconset>
+   </property>
+   <property name="text">
+    <string>恢复</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Y</string>
    </property>
   </action>
  </widget>

@@ -1,21 +1,3 @@
-'''
-GoPose:Artificial intelligence motion analysis software
-Copyright (C) <2021>  <Xihang Chen>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as published
-by the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
-
-You should have received a copy of the GNU Affero General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-Email: 786028450@qq.com
-'''
 # -*- coding: utf-8 -*-
 
 # Form implementation generated from reading ui file 'd:\Code\Python Project\GoPose\UI\GoPose.ui'
@@ -358,7 +340,7 @@ class Ui_MainWindow(object):
         self.pushButton.setObjectName("pushButton")
         self.horizontalLayout_2.addWidget(self.pushButton)
         self.pushButton_10 = QtWidgets.QPushButton(self.widget_2)
-        self.pushButton_10.setEnabled(False)
+        self.pushButton_10.setEnabled(True)
         self.pushButton_10.setMaximumSize(QtCore.QSize(48, 48))
         self.pushButton_10.setStyleSheet("QPushButton:hover{background-color:rgb(255, 255, 255);border-radius: 10px;padding: 10;}\n"
 "\n"
@@ -424,6 +406,8 @@ class Ui_MainWindow(object):
         self.menu_u.setObjectName("menu_u")
         self.menu_2 = QtWidgets.QMenu(self.menubar)
         self.menu_2.setObjectName("menu_2")
+        self.menu_3 = QtWidgets.QMenu(self.menubar)
+        self.menu_3.setObjectName("menu_3")
         MainWindow.setMenuBar(self.menubar)
         self.toolBar = QtWidgets.QToolBar(MainWindow)
         self.toolBar.setObjectName("toolBar")
@@ -483,6 +467,7 @@ class Ui_MainWindow(object):
         font = QtGui.QFont()
         font.setPointSize(16)
         self.tableWidget.setFont(font)
+        self.tableWidget.setContextMenuPolicy(QtCore.Qt.DefaultContextMenu)
         self.tableWidget.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.tableWidget.setFrameShadow(QtWidgets.QFrame.Plain)
         self.tableWidget.setLineWidth(0)
@@ -556,7 +541,7 @@ class Ui_MainWindow(object):
         self.actionNormalSize = QtWidgets.QAction(MainWindow)
         self.actionNormalSize.setEnabled(False)
         icon23 = QtGui.QIcon()
-        icon23.addPixmap(QtGui.QPixmap("Icon/还原.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon23.addPixmap(QtGui.QPixmap("Icon/还原2.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.actionNormalSize.setIcon(icon23)
         self.actionNormalSize.setObjectName("actionNormalSize")
         self.actionAnalysis = QtWidgets.QAction(MainWindow)
@@ -634,6 +619,18 @@ class Ui_MainWindow(object):
         icon32.addPixmap(QtGui.QPixmap("Icon/点赞.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.actionAward.setIcon(icon32)
         self.actionAward.setObjectName("actionAward")
+        self.actionUndo = QtWidgets.QAction(MainWindow)
+        self.actionUndo.setEnabled(False)
+        icon33 = QtGui.QIcon()
+        icon33.addPixmap(QtGui.QPixmap("Icon/撤销.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionUndo.setIcon(icon33)
+        self.actionUndo.setObjectName("actionUndo")
+        self.actionRedo = QtWidgets.QAction(MainWindow)
+        self.actionRedo.setEnabled(False)
+        icon34 = QtGui.QIcon()
+        icon34.addPixmap(QtGui.QPixmap("Icon/还原.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionRedo.setIcon(icon34)
+        self.actionRedo.setObjectName("actionRedo")
         self.menuOut.addAction(self.actionOutPoint)
         self.menuOut.addAction(self.actionOutPara)
         self.menuOut.addAction(self.actionOutVideo)
@@ -663,7 +660,10 @@ class Ui_MainWindow(object):
         self.menu_u.addAction(self.actionlineSize)
         self.menu_2.addAction(self.actionHelp)
         self.menu_2.addAction(self.actionAward)
+        self.menu_3.addAction(self.actionUndo)
+        self.menu_3.addAction(self.actionRedo)
         self.menubar.addAction(self.menu.menuAction())
+        self.menubar.addAction(self.menu_3.menuAction())
         self.menubar.addAction(self.menu_V.menuAction())
         self.menubar.addAction(self.menu_N.menuAction())
         self.menubar.addAction(self.menu_u.menuAction())
@@ -724,6 +724,7 @@ class Ui_MainWindow(object):
         self.menu_N.setTitle(_translate("MainWindow", "解析（&N）"))
         self.menu_u.setTitle(_translate("MainWindow", "设置（&S）"))
         self.menu_2.setTitle(_translate("MainWindow", "帮助（&H)"))
+        self.menu_3.setTitle(_translate("MainWindow", "编辑(&E)"))
         self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar"))
         self.dockWidget.setWindowTitle(_translate("MainWindow", "管理器"))
         self.treeWidget.headerItem().setText(0, _translate("MainWindow", "管理器"))
@@ -782,3 +783,7 @@ class Ui_MainWindow(object):
         self.actionlineSize.setText(_translate("MainWindow", "调整解析点尺寸"))
         self.actionHelp.setText(_translate("MainWindow", "Help"))
         self.actionAward.setText(_translate("MainWindow", "赞赏"))
+        self.actionUndo.setText(_translate("MainWindow", "撤销"))
+        self.actionUndo.setShortcut(_translate("MainWindow", "Ctrl+Z"))
+        self.actionRedo.setText(_translate("MainWindow", "恢复"))
+        self.actionRedo.setShortcut(_translate("MainWindow", "Ctrl+Y"))
