@@ -1022,26 +1022,32 @@ class GoPose(Ui_MainWindow,QMainWindow):
     def dataModify(self,data,point):
         dataRow = []  # 25点在一行
         for d in data:
-            d1 = np.delete(d[0],-1,axis = 1)  # 第0个人的，
-            line = d1.flatten()
-            dataRow.append(line)
-        dataRow = np.array(dataRow)
-        dataT = np.transpose(dataRow)  # 转置 一个点一列
-        select = dataT[point]  # 选择一列数据
-        out,ok = Point_Move.get(self,select)
-        if ok :
-            dataT[point] = np.array(out)  # 覆盖数据
-            # 数据还原成data
-            dataReturn = np.transpose(dataT)
-            dataOut = []
-            for g in dataReturn:
-                twoCol = g.reshape(25,2)
-                c = np.ones(25)
-                result = np.array([np.c_[twoCol,c]])
-                dataOut.append(result)
-            return dataOut
+            if type(d) == np.ndarray:
+                d1 = np.delete(d[0],-1,axis = 1)  # 第0个人的，
+                line = d1.flatten()
+                dataRow.append(line)
+            else:
+                QMessageBox.warning(self,'警告','修改范围必须有解析点')
+                return data
+                break
         else:
-            return data
+            dataRow = np.array(dataRow)
+            dataT = np.transpose(dataRow)  # 转置 一个点一列
+            select = dataT[point]  # 选择一列数据
+            out,ok = Point_Move.get(self,select)
+            if ok :
+                dataT[point] = np.array(out)  # 覆盖数据
+                # 数据还原成data
+                dataReturn = np.transpose(dataT)
+                dataOut = []
+                for g in dataReturn:
+                    twoCol = g.reshape(25,2)
+                    c = np.ones(25)
+                    result = np.array([np.c_[twoCol,c]])
+                    dataOut.append(result)
+                return dataOut
+            else:
+                return data
     
     # 全部25点数据滤波
     # def filt(self):
@@ -1088,7 +1094,7 @@ class GoPose(Ui_MainWindow,QMainWindow):
     #                 for point in range(50):
     #                     if point not in undo:
     #                         outData = lowpass(data,point)
-    #                         self.data[self.cut1:self.cut2] = outData
+    #                         self.data[self.cut1:self.cut2] = outData[:]
     #         else:
     #             data = self.data
     #             undo = [30,31,32,33,34,35,36,37,40,41,46,47]
