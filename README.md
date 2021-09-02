@@ -1,6 +1,7 @@
 # GoPose人工智能运动分析软件  
 - GoPose可以自动进行人体姿态25个关键点识别，方便进行运动技术分析，提供关节角度、位移速度等常用运动学结果，帮助运动员、教练员及体育科研工作者快速得到基础分析结果。
-- GoPose可用于比赛、训练、科研等场景，其优势是无接触式测量和快速反馈。   
+- GoPose可用于比赛、训练、科研等场景，其优势是无接触式测量、快速反馈、免费开源等，解决QUA..SYS等实验室设备需复杂穿戴、F***move人工智能运动分析系统等软件使用价格高昂等问题，帮助广大基层教练员、运动员科学化训练。GoPose存在的劣势主要是软件安装使用需要一定电脑知识、对电脑系统CPU显卡等有一定要求、更多功能需要完善更新。 
+
 ![image](https://github.com/chenxh5678/GoPose/blob/main/README/Image/1.gif)
 ## 项目背景
 - 那年做毕业论文，用北体的视迅软件，半年时间逐帧逐点手动标记运动员的关键点，最终顺利完成论文，非常感谢视迅  
@@ -32,8 +33,16 @@
 <center>resource文件夹图示</center>   
 
 ## 使用方法
-运行GoPose.py文件  
-[演示](https://www.bilibili.com/video/BV1QP4y1s76N/)
+- 运行GoPose.py文件  
+- [使用演示](https://www.bilibili.com/video/BV1QP4y1s76N/)
+- 查看坐标点折线图、快速修正坐标点、对坐标点进行滤波平滑：  
+  ![image](https://github.com/chenxh5678/GoPose/blob/main/README/Image/%E4%BF%AE.png) 
+- 可将运动学结果导出，用于统计记录：  
+  ![image](https://github.com/chenxh5678/GoPose/blob/main/README/Image/%E7%BB%93%E6%9E%9Ccsv.png) 
+- 可将坐标点导出用于进一步分析：  
+  ![image](https://github.com/chenxh5678/GoPose/blob/main/README/Image/%E5%9D%90%E6%A0%87.png) 
+- 运动训练监控：训练场上快速查看技术动作及运动学结果，及时反馈给教练员、运动员：  
+  ![image](https://github.com/chenxh5678/GoPose/blob/main/README/Image/%E7%BB%93%E6%9E%9C.png)
 ## 姿态估计结果  
 Results on COCO test-dev 2015:  
 
